@@ -101,7 +101,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 Contribuições são bem-vindas!  
 Abra uma issue com sugestões, melhorias ou relatando bugs.  
-Pull requests também são muito bem-vindos!
+Pull requests também são muito bem-vindos!.
 
 ---
 
