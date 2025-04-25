@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { GlobalProvider } from "@/components/Provider/GlobalProvider/GlobalProvider";
 import Header from "@/components/Header/Header";
+import { Suspense } from "react";
 
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <GlobalProvider>
-          {children}
+          <Suspense>
+            {children}
+          </Suspense>
         </GlobalProvider>
       </body>
 
