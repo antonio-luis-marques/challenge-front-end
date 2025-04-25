@@ -16,9 +16,7 @@ export default function Header() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  // const { user } = useAuth()
-  const sessionUserRaw = localStorage.getItem('sessionUser');
-  const sessionUser = sessionUserRaw ? JSON.parse(sessionUserRaw) : null;
+  const { user } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +25,7 @@ export default function Header() {
       setLastScrollY(currentScrollY)
     }
 
-
+    
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
@@ -60,7 +58,7 @@ export default function Header() {
               </div>
             </div>
           </form>
-          {sessionUser ? (
+          {user ? (
             <ProfileCard />
           ) : (
             <div className='flex items-center space-x-6'>
@@ -93,7 +91,7 @@ export default function Header() {
             </div>
 
             {/* Auth or Profile */}
-            {sessionUser ? (
+            {user ? (
               <ProfileCard />
             ) : (
               <div className='flex flex-col space-y-4'>

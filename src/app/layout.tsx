@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { GlobalProvider } from "@/components/Provider/GlobalProvider/GlobalProvider";
-import Header from "@/components/Header/Header";
+// import Header from "@/components/Header/Header";
 import { Suspense } from "react";
 
 

@@ -17,7 +17,7 @@ export const useLogin = () => {
       const response = await axios.post('https://challenge-five-peach.vercel.app/login', {email});
       if (response.data) {
         const user = response.data;
-        localStorage.setItem('sessionUser', JSON.stringify(user));
+        // localStorage.setItem('sessionUser', JSON.stringify(user));
         router.push('/');
 
       }
