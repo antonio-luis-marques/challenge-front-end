@@ -17,7 +17,7 @@ export default function SessionCourse() {
             {
               courses.map((courseObj, index) => {
                 return (
-                  <li className={'relative flex space-x-2 items-center ' + (index + 1 != courses.length && ' pb-4')}>
+                  <li key={index} className={'relative flex space-x-2 items-center ' + (index + 1 != courses.length && ' pb-4')}>
                     <div className='flex justify-center'>
                       {/* <div className='w-[1px] z-10 absolute h-full bg-blue-waza'></div> */}
                       <div className=' p-2 z-20 rounded-full bg-[#014421] text-white border border-[#014421]'>
