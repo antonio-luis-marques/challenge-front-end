@@ -20,7 +20,14 @@
 
 body{
   color: var(--foreground);
-  /* font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, Helvetica, Roboto, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
+  font-family: 
+  ui-sans-serif, 
+  system-ui, 
+  sans-serif, 
+  "Apple Color Emoji", 
+  "Segoe UI Emoji", 
+  "Segoe UI Symbol", 
+  "Noto Color Emoji";
 }
 
 

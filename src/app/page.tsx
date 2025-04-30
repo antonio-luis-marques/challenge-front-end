@@ -11,6 +11,7 @@ import PopUpCourse from "@/components/Modal/Course";
 import Course from "@/components/Course/Course";
 import { useModalContext } from '@/components/Provider/ModalProvider/ModalProvider';
 import IntroCard from '@/components/Introduction/IntroCard';
+import CourseCategories from "@/components/Category/CourseCategories";
 
 
 
@@ -22,18 +23,17 @@ export default function Home() {
 
     <body className={`  w-full ` + ((openModalCourse) && ` overflow-hidden`)}>
       {openModalCourse && <PopUpCourse />}
+      
           <Header />
           <IntroCard />
           <div className="pb-10" id="vamosla">
-            <div className=" space-y-4 pt-8 px-4 lg:px-24">
-              <p className=' uppercase font-medium px-2'>Cursos em destaque</p>
+            <div className=" space-y-8 pt-8 px-4 lg:px-24">
+              <CourseCategories/>
               <div className="flex justify-center ">
                 <Course />
               </div>
             </div>
           </div>
-          <JoinWhatsapp />
-          <SessionCourse />
           <Footer />
     </body >
 

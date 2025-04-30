@@ -7,13 +7,13 @@ export const useRegister = () => {
   const [error, setError] = useState<string | null>(null);
   const { register } = useAuth();
 
-  const registerServer = async (name: string, email: string, role: 'aluno' | 'mentor') => {
+  const registerServer = async (name: string, email: string, password: string) => {
     setLoading(true);
     setError(null);
-    console.log('Tentando registrar usuário com os dados:', { name, email, role });
+    console.log('Tentando registrar usuário com os dados:', { name, email, password });
 
     try {
-      const response = await axios.post('https://challenge-five-peach.vercel.app/create', { name, email, role });
+      const response = await axios.post('https://challenge-five-peach.vercel.app/create', { name, email, password });
 
       console.log('Resposta do servidor:', response.data);
 

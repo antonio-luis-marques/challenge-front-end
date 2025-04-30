@@ -8,15 +8,23 @@ import Link from 'next/link'
 import React, { useEffect, useState, MouseEvent } from 'react'
 import ProfileCard from '../Profile/ProfileCard'
 import { useAuth } from '../Provider/AuthProvider/AuthProvider'
-import { Typography, Drawer, IconButton, Box } from '@mui/material'
+import { Typography, Drawer, IconButton, Box, ThemeProvider, Paper, InputBase } from '@mui/material'
+import theme from '../../../theme'
+import { UserData, UserStorage } from '../../../lib/UserStorage'
 
 export default function Header() {
-  const [expandSearch, setExpandSearch] = useState(false)
+  const [expanded, setExpanded] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleToggle = () => {
+    setExpanded((prev) => !prev);
+  };
   const [scrollDir, setScrollDir] = useState<string>('')
   const [lastScrollY, setLastScrollY] = useState(0)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const { user } = useAuth()
+  const [user, setUser] = useState<UserData | null>(null);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,38 +33,88 @@ export default function Header() {
       setLastScrollY(currentScrollY)
     }
 
-    
+
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
+
+  useEffect(() => {
+    const sessionUser = UserStorage.getSession();
+    if (sessionUser) setUser(sessionUser);
+  }, []);
 
   return (
     <div className={`flex h-16 border-b bg-white sticky z-40 w-full xl:px-24 px-4 transition-all duration-500 ${scrollDir === 'up' && lastScrollY != 0 ? 'top-0 shadow-sm' : 'md:-top-16 shadow-sm top-[-66px]'}`}>
       <div className='w-full flex justify-between items-center h-full'>
         {/* Logo */}
-        <div className='flex items-center space-x-4'>
-          <Typography variant="h6" fontWeight="bold">
-            <Link href='/'>
-              MentorConnect<span className='text-[#228B22] text-lg'>.</span>
-            </Link>
-          </Typography>
+        <div className='flex items-center space-x-2'>
+          <img
+            src='/logo.png' 
+            alt='Logo'
+            className='h-12' 
+          />
+          <ThemeProvider theme={theme}>
+
+            <Typography variant="h6" fontWeight="bold" sx={{ margin: 0, padding: 0 }}>
+              <Link href='/'>
+                GJUNGLE
+              </Link>
+            </Typography>
+          </ThemeProvider>
         </div>
 
         {/* Desktop search and profile */}
         <div className='hidden md:flex items-center justify-end flex-1'>
-          <form  className='flex-1 pr-4'>
-            <div className='w-full relative flex h-14 items-center space-x-4'>
-              <div className='left-8 text-slate-600 absolute cursor-pointer z-50'>
-                <Search />
-              </div>
-              <div className={`h-10 items-center flex opacity-0 lg:opacity-100 w-0 pl-12 border transition-all duration-500 rounded-full flex-1 overflow-hidden ${expandSearch ? 'opacity-100 w-full' : ''}`}>
-                <input
-                  type="search"
-                  className='w-full h-full text-slate-500 text-sm border-0 focus:outline-none bg-transparent'
-                  placeholder='Pesquisar cursos'
+          <form className='flex-1 pr-4'>
+            <Box display="flex" alignItems="center" justifyContent="flex-end">
+              <Paper
+                onClick={handleToggle}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  px: 1,
+                  py: 0.5,
+                  width: expanded ? { xs: '100%', sm: 200 } : 40,
+                  transition: 'width 0.3s ease, border 0.3s ease, background-color 0.3s ease',
+                  overflow: 'hidden',
+                  boxShadow: 'none',
+                  border: expanded ? '1px solid green' : '1px solid transparent',
+                  borderRadius: 2,
+                  ...(expanded
+                    ? {}
+                    : {
+                      '&:hover': {
+                        border: '1px solid green',
+                        backgroundColor: 'green',
+                        cursor: 'pointer',
+                      },
+                    }),
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: expanded ? 'auto' : '40px',
+                  }}
+                >
+                  <Search size={24} />
+                </Box>
+                <InputBase
+                  placeholder="Buscar..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  sx={{
+                    ml: 1,
+                    flex: 1,
+                    opacity: expanded ? 1 : 0,
+                    transition: 'opacity 0.2s ease',
+                  }}
                 />
-              </div>
-            </div>
+              </Paper>
+            </Box>
           </form>
           {user ? (
             <ProfileCard />

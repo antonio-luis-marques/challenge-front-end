@@ -22,7 +22,7 @@ export default function CourseDescription() {
   if (!id) {
     return (
       <div className="text-center p-20 text-xl font-semibold">
-        Nenhum curso foi selecionado.
+        Nenhum curso foi selecionado
       </div>
     )
   }

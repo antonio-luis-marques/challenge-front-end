@@ -1,7 +1,8 @@
 import { Bell, History, LogOut, Settings, User } from 'lucide-react'
 import Link from 'next/link'
 import React, { MouseEvent, useEffect, useRef, useState } from 'react'
-import { useAuth } from '../Provider/AuthProvider/AuthProvider'
+import { useRouter } from 'next/navigation';
+import { UserData, UserStorage } from '../../../lib/UserStorage'
 
 
 export default function ProfileCard() {
@@ -13,10 +14,10 @@ export default function ProfileCard() {
     const [scrollDir, setScrollDir] = useState<string>('')
     const [lastScrollY, setLastScrollY] = useState(0)
     const profileOption = useRef<HTMLDivElement>(null)
+    const [user, setUser] = useState<UserData | null>(null);
 
-    const { user, logout } = useAuth()
 
-    
+    const router = useRouter()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,23 +37,33 @@ export default function ProfileCard() {
 
     }, [])
 
+    useEffect(() => {
+        const sessionUser = UserStorage.getSession();
+        if (sessionUser) setUser(sessionUser);
+    }, []);
 
-    const handleMouseEnter = () => {
-        if (!profileClick) {
-            if (nameRef.current) {
-                nameRef.current.style.display = 'block';
-            }
-        }
+
+    // const handleMouseEnter = () => {
+    //     if (!profileClick) {
+    //         if (nameRef.current) {
+    //             nameRef.current.style.display = 'block';
+    //         }
+    //     }
+    // };
+
+    const logout = () => {
+        UserStorage.logout();
+        setUser(null);
+        router.push('/login');
     };
 
 
+    // const handleMouseLeave = () => {
 
-    const handleMouseLeave = () => {
-
-        if (nameRef.current) {
-            nameRef.current.style.display = 'none';
-        }
-    };
+    //     if (nameRef.current) {
+    //         nameRef.current.style.display = 'none';
+    //     }
+    // };
 
     const handleClickProfile = () => {
         setProfileClick(!profileClick)
@@ -116,11 +127,11 @@ export default function ProfileCard() {
                 <User />
                 <div className={' select-none divide-y min-w-72 shadow-sm border bg-white text-[15px] absolute right-0 top-10  rounded-lg ' + (!profileClick && 'hidden')}>
                     <div className='p-2 font-normal'>
-                        <Link href={`/profile?id=${user?.dataUser.name}`} className='flex hover:bg-zinc-50 p-1 items-center space-x-2'>
+                        <Link href={``} className='flex hover:bg-zinc-50 p-1 items-center space-x-2'>
                             <div className='p-2 rounded-full bg-zinc-50'>
                                 <User size={16} />
                             </div>
-                            <span className='whitespace-nowrap'>Antonio Marques</span>
+                            <span className='whitespace-nowrap'>{user?.name}</span>
                         </Link>
                     </div>
                     <div className='p-2 px-4 font-normal'>
@@ -130,17 +141,17 @@ export default function ProfileCard() {
                     </div>
                 </div>
             </div>
-            <div className="w-full divide-y divide-[#014421] text-sm text-[#014421] select-none rounded-lg shadow-md overflow-hidden bg-white">
+            <div className="w-full divide-y divide-[#014421] md:hidden text-sm text-[#014421] select-none rounded-lg shadow-md overflow-hidden bg-white">
                 {/* Link para perfil */}
                 <div className="p-3">
                     <Link
-                        href={`/profile?id=${user?.dataUser.name}`}
+                        href={``}
                         className="flex items-center space-x-3 rounded-md hover:bg-[#e6f5ea] transition-colors p-2"
                     >
                         <div className="bg-[#e6f5ea] p-2 rounded-full">
                             <User size={18} className="text-[#014421]" />
                         </div>
-                        <span className="font-semibold truncate">{user?.dataUser.name || 'Perfil'}</span>
+                        <span className="font-semibold truncate">{user?.name || 'Perfil'}</span>
                     </Link>
                 </div>
 

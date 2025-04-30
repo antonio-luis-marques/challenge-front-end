@@ -2,87 +2,90 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { useAuth } from '@/components/Provider/AuthProvider/AuthProvider';
-import { Typography } from '@mui/material';
+import { ThemeProvider, Typography } from '@mui/material';
 import { z } from 'zod';
-import { useRegister } from '@/hooks/useRegister';
+import Image from 'next/image';
+import theme from '../../../../theme';
+import { Eye, EyeOff } from 'lucide-react';
+import { UserStorage } from '../../../../lib/UserStorage';
+import { useRouter } from 'next/navigation';
 
-// Schema com Zod
 const userSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório."),
   email: z.string().email("E-mail inválido."),
-  role: z.enum(['aluno', 'mentor'], {
-    errorMap: () => ({ message: "Tipo de usuário deve ser 'aluno' ou 'mentor'." }),
-  }),
+  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres."),
 });
 
 export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<'aluno' | 'mentor'>('aluno');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { registerServer, loading, error: registerError } = useRegister();
+
+  const router = useRouter()
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = userSchema.safeParse({ name, email, role });
+    const result = userSchema.safeParse({ name, email, password });
 
     if (!result.success) {
       setError(result.error.errors[0].message);
       return;
     }
 
-    setError(null); // limpa erro anterior
-    await registerServer(name, email, role); 
-
+    setError(null);
+    const success = UserStorage.register({ name, email, password });
+    if (success) router.push('/')
   };
 
   return (
-    <div className='h-screen w-full flex'>
+    <div className='h-screen w-full flex bg-[#34c75945]'>
       <div className='w-1/2 h-full overflow-hidden bg-[#014421] relative md:flex hidden justify-center items-center'>
-        <p className='text-6xl text-white font-bold absolute z-20'>MentorConnect.</p>
-      </div>
-      <div className='space-y-2 px-4 flex-1 flex flex-col justify-center items-center h-full'>
-        <div className='flex items-center space-x-4'>
-          <Typography variant="h6" fontWeight="bold">
-            <Link href='/'>
-              MentorConnect<span className='text-[#228B22]'>.</span>
-            </Link>
-          </Typography>
+        <div className='z-20 px-20 flex flex-col items-center justify-center text-white'>
+          <ThemeProvider theme={theme}>
+            <Typography variant="h5" fontWeight="bold">
+              Aprenda o que o mercado precisa.
+            </Typography>
+            <Typography variant="h6" fontWeight="bold" sx={{ mt: 1, fontStyle: 'italic' }}>
+              Formação. Certificação. Conexões.
+            </Typography>
+          </ThemeProvider>
         </div>
+        <div className='absolute z-10 opacity-75'>
+          <Image
+            src={'https://res.cloudinary.com/dt0vpc25d/image/upload/v1745917966/grupo%20jungle/login-register/cover1.jpg'}
+            alt={''}
+            width={600}
+            height={400}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+            unoptimized
+          />
+        </div>
+      </div>
+
+      <div className='space-y-2 px-4 flex-1 flex flex-col justify-center items-center h-full'>
         <div className="md:w-96 w-full">
+          <div className='flex items-center w-full space-x-2 mb-4'>
+            <img src='/logo.png' alt='Logo' className='h-10' />
+            <ThemeProvider theme={theme}>
+              <Typography variant="h6" fontWeight="bold" sx={{ margin: 0, padding: 0 }}>
+                <Link href='/'>GJUNGLE</Link>
+              </Typography>
+            </ThemeProvider>
+          </div>
+
           <div className="flex flex-col p-6 rounded-lg overflow-hidden w-full space-y-6 bg-[#014421]">
             <p className="font-medium text-lg text-center text-white">Criar conta</p>
 
-            <div className="flex justify-center gap-6 text-white">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="role"
-                  value="aluno"
-                  checked={role === 'aluno'}
-                  onChange={() => setRole('aluno')}
-                  className="accent-[#21dda9]"
-                />
-                <span>Aluno</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="role"
-                  value="mentor"
-                  checked={role === 'mentor'}
-                  onChange={() => setRole('mentor')}
-                  className="accent-[#21dda9]"
-                />
-                <span>Mentor</span>
-              </label>
-            </div>
-
             <form onSubmit={onSubmit} className="space-y-6">
               {error && <p className="text-red-500 text-sm">{error}</p>}
-              {registerError && <p className="text-red-500 text-sm">{registerError}</p>}
+
               <div className="relative">
                 <input
                   id="name"
@@ -109,18 +112,38 @@ export default function Register() {
                 </label>
               </div>
 
-              <button type="submit" className="bg-[#21dda9] active:scale-95 focus:outline-none w-full h-12 font-semibold text-white rounded-md">
-                {loading ? 'Carregando...' : 'Criar'}
+              <div className="relative">
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  className="block px-4 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-transparent rounded-lg border border-[#21dda9] appearance-none focus:outline-none focus:ring-0 focus:border-[#21dda9] peer"
+                  placeholder=" "
+                />
+                <label htmlFor="password" className="absolute text-sm text-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#014421] px-2 peer-focus:px-2 peer-focus:text-[#21dda9] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
+                  Senha
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-white"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+
+              <button type="submit" className="bg-[#228B22] active:scale-95 focus:outline-none w-full h-12 font-semibold text-white rounded-md">
+                Criar
               </button>
             </form>
           </div>
 
-          <div className="flex-1 border rounded-lg py-4 mt-8 text-center bg-[#f4f4f4]">
-            <p className="text-[#014421]">Já tens uma conta? <Link href="/account/login" className="font-medium text-[#228B22] underline">Entrar</Link></p>
+          <div className="flex-1 border rounded-lg py-4 mt-8 text-center bg-[#014421]">
+            <p className="text-white">Já tens uma conta? <Link href="/account/login" className="font-medium text-[#228B22] underline">Entrar</Link></p>
           </div>
         </div>
 
-        <p className='text-sm py-2 md:px-10 px-4'>© 2025 - MentorConnect. Todos direitos reservados. | Política de privacidade</p>
+        <p className='text-sm py-2 md:px-10 px-4'>© 2025 - GRUPO JUNGLE. Todos direitos reservados. | Política de privacidade</p>
       </div>
     </div>
   );
