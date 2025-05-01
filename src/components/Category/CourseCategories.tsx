@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 import {
   Laptop,
@@ -86,10 +84,11 @@ export default function CourseCategories() {
           value={selectedIndex}
           onChange={handleChange}
           variant="scrollable"
-          scrollButtons={isMobile ? false : 'auto'}
-          allowScrollButtonsMobile
+          scrollButtons="auto"  // Manter as setas visíveis
+          allowScrollButtonsMobile={true}  // Permitir que as setas funcionem em dispositivos móveis
           TabIndicatorProps={{ style: { display: 'none' } }} // remove underline
           sx={{
+            position: 'relative',  // Necessário para que as setas possam ser posicionadas de forma absoluta
             '& .MuiTab-root': {
               minWidth: 200,
               height: 60,
@@ -112,6 +111,31 @@ export default function CourseCategories() {
               bgcolor: 'rgba(34, 139, 34, 0.1)',
               color: '#228B22',
               borderColor: '#228B22',
+            },
+            // Posicionando as setas no canto esquerdo e direito
+            '& .MuiTabs-scrollButtons': {
+              position: 'absolute',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 1,
+              backgroundColor: '#ccc',  // Cor de fundo zinc
+              color: '#228B22',  // Cor verde para as setas
+              borderRadius: '50%',  // Garantir formato circular
+              width: 40,  // Definindo largura e altura iguais para o círculo
+              height: 40,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 0,  // Garantir que não haja padding extra
+            },
+            '& .MuiTabs-scrollButtons:first-of-type': {
+              left: 0, // Canto esquerdo
+            },
+            '& .MuiTabs-scrollButtons:last-of-type': {
+              right: 0, // Canto direito
+            },
+            '& .MuiTabs-scrollButtons.Mui-disabled': {
+              opacity: 0,  // Deixar as setas invisíveis quando desabilitadas
             },
           }}
         >

@@ -54,7 +54,7 @@ export default function ProfileCard() {
     const logout = () => {
         UserStorage.logout();
         setUser(null);
-        router.push('/login');
+        router.push('/');
     };
 
 

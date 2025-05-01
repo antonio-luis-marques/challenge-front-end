@@ -78,22 +78,37 @@ export default function Login() {
 
             <div className='space-y-2 px-4 flex-1 flex flex-col justify-center items-center h-full'>
                 <div className="md:w-96 w-full">
-                    <div className='flex items-center w-full space-x-2 mb-4'>
-                        <img
-                            src='/logo.png'
-                            alt='Logo'
-                            className='h-10'
-                        />
-                        <ThemeProvider theme={theme}>
-                            <Typography variant="h6" fontWeight="bold" sx={{ margin: 0, padding: 0 }}>
-                                <Link href='/'>GJUNGLE</Link>
-                            </Typography>
-                        </ThemeProvider>
-                    </div>
 
                     <div className="flex flex-col p-6 rounded-lg overflow-hidden w-full space-y-6 bg-[#014421]">
-                        <p className="font-medium text-lg text-center text-white">Acesse sua conta</p>
-
+                        <div>
+                            <div className='flex items-center w-full space-x-2 mb-4 justify-center text-center'>
+                                <img
+                                    src='/logo.png'
+                                    alt='Logo'
+                                    className='h-8'
+                                />
+                                <ThemeProvider theme={theme}>
+                                    <Typography
+                                        variant="h6"
+                                        fontWeight="bold"
+                                        sx={{ color: 'white', margin: 0, padding: 0 }}
+                                    >
+                                        <Link href='/' className="text-white">GJUNGLE</Link>
+                                    </Typography>
+                                </ThemeProvider>
+                            </div>
+                            <ThemeProvider theme={theme}>
+                                <Typography
+                                    sx={{
+                                        color: 'white',
+                                        fontSize: '14px', // Tamanho pequeno para o texto
+                                        textAlign: 'center', // Centraliza o texto
+                                    }}
+                                >
+                                    Acesse sua conta
+                                </Typography>
+                            </ThemeProvider>
+                        </div>
                         <form onSubmit={handleSubmit} action="" method="post" className="space-y-6">
                             {error && <p className="text-red-500 text-sm">{error}</p>}
                             {/* {loginError && <p className="text-red-500 text-sm">{loginError}</p>} */}

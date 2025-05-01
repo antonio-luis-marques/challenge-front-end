@@ -5,9 +5,8 @@ import {
   Search,
 } from 'lucide-react'
 import Link from 'next/link'
-import React, { useEffect, useState, MouseEvent } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProfileCard from '../Profile/ProfileCard'
-import { useAuth } from '../Provider/AuthProvider/AuthProvider'
 import { Typography, Drawer, IconButton, Box, ThemeProvider, Paper, InputBase } from '@mui/material'
 import theme from '../../../theme'
 import { UserData, UserStorage } from '../../../lib/UserStorage'
@@ -15,16 +14,14 @@ import { UserData, UserStorage } from '../../../lib/UserStorage'
 export default function Header() {
   const [expanded, setExpanded] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [scrollDir, setScrollDir] = useState<string>('')
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [user, setUser] = useState<UserData | null>(null);
 
   const handleToggle = () => {
     setExpanded((prev) => !prev);
   };
-  const [scrollDir, setScrollDir] = useState<string>('')
-  const [lastScrollY, setLastScrollY] = useState(0)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const [user, setUser] = useState<UserData | null>(null);
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +29,6 @@ export default function Header() {
       setScrollDir(currentScrollY > lastScrollY ? 'down' : 'up')
       setLastScrollY(currentScrollY)
     }
-
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -46,15 +42,14 @@ export default function Header() {
   return (
     <div className={`flex h-16 border-b bg-white sticky z-40 w-full xl:px-24 px-4 transition-all duration-500 ${scrollDir === 'up' && lastScrollY != 0 ? 'top-0 shadow-sm' : 'md:-top-16 shadow-sm top-[-66px]'}`}>
       <div className='w-full flex justify-between items-center h-full'>
-        {/* Logo */}
+        {/* Logo e título */}
         <div className='flex items-center space-x-2'>
           <img
-            src='/logo.png' 
+            src='/logo.png'
             alt='Logo'
-            className='h-12' 
+            className='h-12'
           />
           <ThemeProvider theme={theme}>
-
             <Typography variant="h6" fontWeight="bold" sx={{ margin: 0, padding: 0 }}>
               <Link href='/'>
                 GJUNGLE
@@ -63,8 +58,8 @@ export default function Header() {
           </ThemeProvider>
         </div>
 
-        {/* Desktop search and profile */}
-        <div className='hidden md:flex items-center justify-end flex-1'>
+        {/* Desktop search, instrutor e perfil */}
+        <div className='hidden md:flex items-center justify-end flex-1 space-x-2'>
           <form className='flex-1 pr-4'>
             <Box display="flex" alignItems="center" justifyContent="flex-end">
               <Paper
@@ -117,10 +112,28 @@ export default function Header() {
               </Paper>
             </Box>
           </form>
+          <div className='flex items-center '>
+            <Link
+              href=''
+              target='_blank'
+              rel='noopener noreferrer'
+              className='ml-4 h-8 px-4 text-[#228B22] rounded-md transition hidden md:inline-flex items-center hover:text-white hover:bg-[#228B22]'
+            >
+              Instrutor
+            </Link>
+            <Link
+              href='https://marketplace.seudominio.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='h-8 px-4 text-[#228B22] rounded-md transition hidden md:inline-flex items-center hover:text-white hover:bg-[#228B22]'
+            >
+              Marketplace
+            </Link>
+          </div>
           {user ? (
             <ProfileCard />
           ) : (
-            <div className='flex items-center space-x-6'>
+            <div className='flex items-center space-x-6 ml-4'>
               <Link href='/account/login' className='text-[#228B22]'>Entrar</Link>
               <Link href='/account/register' className='h-8 px-4 bg-[#228B22] flex justify-center items-center rounded-md text-white'>Registar</Link>
             </div>
@@ -134,10 +147,10 @@ export default function Header() {
           </IconButton>
         </div>
 
-        {/* Sidebar for mobile */}
+        {/* Sidebar para mobile */}
         <Drawer anchor="right" open={sidebarOpen} onClose={() => setSidebarOpen(false)}>
           <Box sx={{ width: 300, p: 2 }}>
-            {/* Search in sidebar */}
+            {/* Search no sidebar */}
             <div className='mb-4'>
               <div className='flex items-center space-x-2 border rounded-full p-2'>
                 <Search className='text-slate-600' />
@@ -149,7 +162,7 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Auth or Profile */}
+            {/* Autenticação ou perfil */}
             {user ? (
               <ProfileCard />
             ) : (
@@ -158,9 +171,30 @@ export default function Header() {
                 <Link href='/account/register' className='bg-[#228B22] text-white p-2 rounded text-center'>Registar</Link>
               </div>
             )}
+
+            {/* Botão instrutor no mobile */}
+            <div className='space-y-4 mt-4 flex-col flex'>
+            <Link
+              href='https://instrutor.seudominio.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
+            >
+              Instrutor
+            </Link>
+            <Link
+              href='https://marketplace.seudominio.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
+            >
+              Marketplace
+            </Link>
+            </div>
+
           </Box>
         </Drawer>
       </div>
     </div>
-  )
+  );
 }

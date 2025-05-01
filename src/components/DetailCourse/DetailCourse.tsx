@@ -56,7 +56,7 @@ export default function DetailCourse({ id }: DetailCourseProps) {
 
   const handleOpenMpesa = () => {
     const sessionUser = UserStorage.getSession();
-    if (!sessionUser) router.push('/account/login')
+    if (!sessionUser) return router.push('/account/login')
     setOpenMpesa(true);
 
   }
