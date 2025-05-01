@@ -68,7 +68,6 @@ export default function Header() {
           <form className='flex-1 pr-4'>
             <Box display="flex" alignItems="center" justifyContent="flex-end">
               <Paper
-                onClick={handleToggle}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -98,7 +97,9 @@ export default function Header() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     width: expanded ? 'auto' : '40px',
+                    cursor: 'pointer',
                   }}
+                  onClick={handleToggle}
                 >
                   <Search size={24} />
                 </Box>

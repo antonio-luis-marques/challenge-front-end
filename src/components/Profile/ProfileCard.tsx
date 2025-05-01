@@ -125,18 +125,21 @@ export default function ProfileCard() {
                 onClick={handleClickProfile}
             >
                 <User />
-                <div className={' select-none divide-y min-w-72 shadow-sm border bg-white text-[15px] absolute right-0 top-10  rounded-lg ' + (!profileClick && 'hidden')}>
+                <div className={' select-none divide-y divide-[#014421] text-[#014421]  min-w-72 shadow-sm border bg-white text-[15px] absolute right-0 top-10  rounded-lg ' + (!profileClick && 'hidden')}>
                     <div className='p-2 font-normal'>
-                        <Link href={``} className='flex hover:bg-zinc-50 p-1 items-center space-x-2'>
+                        <Link href={``} 
+                            className="flex items-center space-x-3 text-[#014421] hover:bg-[#e6f5ea] transition-colors p-1 rounded-md w-full"                            >
                             <div className='p-2 rounded-full bg-zinc-50'>
-                                <User size={16} />
+                                <User size={16} className="text-[#014421]"/>
                             </div>
                             <span className='whitespace-nowrap'>{user?.name}</span>
                         </Link>
                     </div>
-                    <div className='p-2 px-4 font-normal'>
-                        <button onClick={logout} className='flex w-full hover:bg-zinc-50 p-1 items-center space-x-2'>
-                            <LogOut size={16} /><span>Sair</span>
+                    <div className='p-2 font-normal'>
+                        <button onClick={logout}
+                            className="flex items-center space-x-3 text-[#014421] hover:bg-[#e6f5ea] transition-colors p-2 rounded-md w-full"
+                        >
+                            <LogOut size={16} className="text-[#014421]" /><span>Sair</span>
                         </button>
                     </div>
                 </div>

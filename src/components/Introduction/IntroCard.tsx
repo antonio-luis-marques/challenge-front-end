@@ -1,9 +1,9 @@
 'use client';
 
-import { ArrowRight, BookOpen, BadgeCheck, Store } from 'lucide-react';
+import { ArrowRight, BookOpen, BadgeCheck, Store, Search, FileX } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import Image from 'next/image';
 import theme from '../../../theme';
 import { ThemeProvider } from '@mui/material/styles';
@@ -20,18 +20,19 @@ const slides = [
     title: 'Certificação',
     description: 'Valide suas habilidades com certificações reconhecidas e feedback personalizado de especialistas da área.',
     icon: BadgeCheck,
-    imageUrl: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746040184/grupo%20jungle/cover2.jpg',
+    imageUrl: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
   },
   {
     title: 'Marketplace',
     description: 'Conecte-se a oportunidades reais: ofereça serviços ou contrate talentos certificados em nossa plataforma exclusiva.',
     icon: Store,
-    imageUrl: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1745864989/grupo%20jungle/cover.jpg',
+    imageUrl: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
   },
 ];
 
 export default function IntroCard() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,6 +42,13 @@ export default function IntroCard() {
   }, []);
 
   const CurrentIcon = slides[currentSlide].icon;
+
+  const handleSearch = () => {
+    if (searchTerm.trim() !== '') {
+      console.log('Buscando por:', searchTerm);
+      // Aqui você pode chamar sua função de busca
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -72,6 +80,7 @@ export default function IntroCard() {
             fontWeight="bold"
             gutterBottom
             sx={{
+              textAlign: 'center',
               fontSize: {
                 xs: '1.5rem',  // smartphones (~24px)
                 sm: '2rem',    // tablets (~32px)
@@ -88,6 +97,7 @@ export default function IntroCard() {
             fontWeight="bold"
             sx={{
               mt: 1,
+              textAlign: 'center',
               fontStyle: 'italic',
               fontSize: {
                 xs: '1rem',
@@ -98,28 +108,39 @@ export default function IntroCard() {
           >
             Formação. Certificação. Conexões.
           </Typography>
-
-          <Link href="#listCourses" passHref>
-            <Button
-              variant="contained"
+          <Box sx={{ display: 'flex', justifyContent: 'center' , pt: 4}}>
+            <TextField
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Pesquisar..."
+              fullWidth
+              variant="outlined"
               sx={{
-                mt: 3,
-                backgroundColor: '#228B22',
-                color: 'white',
-                fontWeight: 'bold',
-                borderRadius: 2,
-                px: 3,
-                py: 1,
-                alignSelf: 'start',
-                '&:hover': {
-                  backgroundColor: '#014421',
+                maxWidth: 400,
+                backgroundColor: 'white',
+                borderRadius: '9999px',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '9999px',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#ccc',
+                },
+                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#228B22',// verde
                 },
               }}
-              endIcon={<ArrowRight />}
-            >
-              Comece agora
-            </Button>
-          </Link>
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch}>
+                      <Search size={18} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+
         </Box>
 
         {/* Carrossel da Direita */}

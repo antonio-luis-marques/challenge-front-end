@@ -13,7 +13,7 @@ export default function Footer() {
             <ul>
               <li className="flex items-center mb-2">
                 <Mail className="mr-2" />
-                <a href="mailto:contato@wazzacursos.com">contacto@mentorconnect.com</a>
+                <a href="mailto:contato@wazzacursos.com">contacto@gjungle.com</a>
               </li>
               <li className="flex items-center mb-2">
                 <Phone className="mr-2" />
@@ -73,7 +73,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-slate-700 mt-8 pt-4 text-center">
-          <p>&copy; 2025 MindConnect. Todos os direitos reservados.</p>
+          <p>&copy; 2025 GJungle. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
