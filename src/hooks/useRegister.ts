@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '@/components/Provider/AuthProvider/AuthProvider';
+// import { useAuth } from '@/components/Provider/AuthProvider/AuthProvider';
 
 export const useRegister = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { register } = useAuth();
+  // const { register } = useAuth();
 
   const registerServer = async (name: string, email: string, password: string) => {
     setLoading(true);
