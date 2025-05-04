@@ -2,8 +2,6 @@
 
 import Link from 'next/link'
 import React from 'react'
-import { useModalContext } from '../Provider/ModalProvider/ModalProvider'
-import { useContextIdCourse } from '../Provider/IdCourseProvider/IdCourseProvider'
 import { Box, Typography, Button, ThemeProvider } from '@mui/material'
 import { courses } from '@/data/course'
 import Image from 'next/image'
@@ -12,14 +10,8 @@ import { Course as CourseType } from '@/models/course'
 import theme from '../../../theme'
 
 export default function Course() {
-  const { setOpenModalCourse } = useModalContext()
-  const { setIdCourse } = useContextIdCourse()
-  const { categoryCourse } = useContextCategoryCourse()
 
-  const handleOpenModalCourse = (id: string) => {
-    setOpenModalCourse(true)
-    setIdCourse(id)
-  }
+  const { categoryCourse } = useContextCategoryCourse()
 
   const hasFreeVideos = (course: CourseType) =>
     course.modules.some(mod => mod.videos.some(vid => vid.isFree))
@@ -70,10 +62,9 @@ export default function Course() {
                 justifyContent: 'center',
                 overflow: 'hidden',
               }}
-              onClick={() => handleOpenModalCourse(item.id)}
             >
               <Image
-                src={'https://res.cloudinary.com/dt0vpc25d/image/upload/v1745554439/mentorconnect/graphql/crnmbvast9wtvl9qx59u.png'}
+                src={item.cover}
                 alt={item.title}
                 className='w-full h-48 object-cover transition-transform duration-300 ease-in-out transform hover:scale-105'
                 width={400}
@@ -131,7 +122,7 @@ export default function Course() {
                     textTransform: 'none',
                   }}
                 >
-                  {item.isFree || hasFreeVideos(item) ? 'Assistir' : 'Matricular-se'}
+                  Ver mais
                 </Button>
               </Link>
             </Box>

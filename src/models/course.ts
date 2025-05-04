@@ -5,6 +5,7 @@ export type Course = {
   title: string;
   description?: string;
   category: CourseCategory;
+  cover: string;
   isFree: boolean;
   price?: number;
   instructor: string;

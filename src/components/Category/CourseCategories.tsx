@@ -40,36 +40,12 @@ const categories: CourseCategory[] = [
     icon: (color) => <Server size={24} color={color} />,
     iconColor: '#228B22',
   },
-  {
-    id: '3',
-    name: 'Mobile',
-    icon: (color) => <Smartphone size={24} color={color} />,
-    iconColor: '#228B22',
-  },
-  {
-    id: '4',
-    name: 'Data Science',
-    icon: (color) => <Database size={24} color={color} />,
-    iconColor: '#228B22',
-  },
-  {
-    id: '5',
-    name: 'DevOps',
-    icon: (color) => <Settings size={24} color={color} />,
-    iconColor: '#228B22',
-  },
-  {
-    id: '6',
-    name: 'Inteligência Artificial',
-    icon: (color) => <Brain size={24} color={color} />,
-    iconColor: '#228B22',
-  },
+ 
 ]
 
 export default function CourseCategories() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const { setCategoryCourse } = useContextCategoryCourse()
-  const isMobile = useMediaQuery('(max-width:600px)')
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedIndex(newValue)

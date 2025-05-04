@@ -7,6 +7,7 @@ import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '
 import Image from 'next/image';
 import theme from '../../../theme';
 import { ThemeProvider } from '@mui/material/styles';
+import { UserData, UserStorage } from '../../../lib/UserStorage';
 
 
 const slides = [
@@ -33,6 +34,14 @@ const slides = [
 export default function IntroCard() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [user, setUser] = useState<UserData | null>(null)
+
+
+
+  useEffect(() => {
+    const sessionUser = UserStorage.getSession()
+    if (sessionUser) setUser(sessionUser)
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -108,38 +117,26 @@ export default function IntroCard() {
           >
             Formação. Certificação. Conexões.
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center' , pt: 4}}>
-            <TextField
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Pesquisar..."
-              fullWidth
-              variant="outlined"
+          {!user && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}>
+            <Button
+              href="/account/login"
               sx={{
-                maxWidth: 400,
                 backgroundColor: 'white',
-                borderRadius: '9999px',
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '9999px',
+                color: 'green',
+                border: 'none',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#f0f0f0',
                 },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#ccc',
-                },
-                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#228B22',// verde
-                },
+                padding: 2
               }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch}>
-                      <Search size={18} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+            >
+              Comece agora
+            </Button>
           </Box>
+          )}
+          
 
         </Box>
 

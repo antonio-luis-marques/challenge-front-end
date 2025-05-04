@@ -5,19 +5,12 @@ import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import DetailCourse from '@/components/DetailCourse/DetailCourse'
 import SeeToo from '@/components/SeeToo/SeeToo'
-import PopUpCourse from '@/components/Modal/Course'
 import { useSearchParams } from 'next/navigation'
 import { useModalContext } from '@/components/Provider/ModalProvider/ModalProvider'
 
 export default function CourseDescription() {
   const searchParams = useSearchParams()
   const id = searchParams.get("id")
-
-  const { openModalCourse, openModalEditProfile, setOpenModalCourse } = useModalContext()
-
-  useEffect(() => {
-    setOpenModalCourse(false)
-  }, [])
 
   if (!id) {
     return (
@@ -28,8 +21,7 @@ export default function CourseDescription() {
   }
 
   return (
-    <div className={openModalCourse || openModalEditProfile ? 'overflow-hidden' : ''}>
-      {openModalCourse && <PopUpCourse />}
+    <div >
       <div>
         <Header />
         <DetailCourse id={id} />

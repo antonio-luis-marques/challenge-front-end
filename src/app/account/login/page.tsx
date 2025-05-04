@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { ThemeProvider, Typography } from '@mui/material';
+import { Avatar, Box, Stack, ThemeProvider, Typography } from '@mui/material';
 import { z } from 'zod';
-import { useLogin } from '@/hooks/useLogin';
+// import { useLogin } from '@/hooks/useLogin';
 import Image from 'next/image';
 import theme from '../../../../theme';
 import { Eye, EyeOff } from 'lucide-react';
@@ -48,7 +48,7 @@ export default function Login() {
     };
 
     return (
-        <div className='h-screen w-full flex bg-[#34c75945]'>
+        <div className='h-screen w-full flex bg-[#0A1E14]'>
             <div className='w-1/2 h-full overflow-hidden bg-[#014421] relative md:flex hidden justify-center items-center'>
                 <div className='z-20 px-20 flex flex-col items-center justify-center text-white'>
                     <ThemeProvider theme={theme}>
@@ -79,36 +79,36 @@ export default function Login() {
             <div className='space-y-2 px-4 flex-1 flex flex-col justify-center items-center h-full'>
                 <div className="md:w-96 w-full">
 
-                    <div className="flex flex-col p-6 rounded-lg overflow-hidden w-full space-y-6 bg-[#014421]">
+                    <div className="flex flex-col p-6 rounded-lg overflow-hidden w-full bg-[#122C22]">
                         <div>
-                            <div className='flex items-center w-full space-x-2 mb-4 justify-center text-center'>
-                                <img
-                                    src='/logo.png'
-                                    alt='Logo'
-                                    className='h-8'
-                                />
-                                <ThemeProvider theme={theme}>
-                                    <Typography
-                                        variant="h6"
-                                        fontWeight="bold"
-                                        sx={{ color: 'white', margin: 0, padding: 0 }}
-                                    >
-                                        <Link href='/' className="text-white">GJUNGLE</Link>
-                                    </Typography>
-                                </ThemeProvider>
-                            </div>
                             <ThemeProvider theme={theme}>
-                                <Typography
-                                    sx={{
-                                        color: 'white',
-                                        fontSize: '14px', // Tamanho pequeno para o texto
-                                        textAlign: 'center', // Centraliza o texto
-                                    }}
-                                >
-                                    Acesse sua conta
-                                </Typography>
+
+                                <Link href="/" passHref>
+                                    <Stack
+                                        direction="row"
+                                        spacing={2}
+                                        alignItems="center"
+                                        mb={4}
+                                        className="cursor-pointer"
+                                    >
+                                        <Avatar
+                                            alt="Logo Jungle Mídia"
+                                            src="/logo.png"
+                                            sx={{ width: 56, height: 56 }}
+                                        />
+                                        <Box>
+                                            <Typography variant="h5" fontWeight="bold" color="white">
+                                                Jungle Mídia
+                                            </Typography>
+                                            <Typography variant="subtitle2" color="#90A99F">
+                                                Acesse sua conta na Jungle Mídia
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+                                </Link>
                             </ThemeProvider>
                         </div>
+
                         <form onSubmit={handleSubmit} action="" method="post" className="space-y-6">
                             {error && <p className="text-red-500 text-sm">{error}</p>}
                             {/* {loginError && <p className="text-red-500 text-sm">{loginError}</p>} */}
@@ -119,10 +119,10 @@ export default function Login() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     value={email}
                                     type="email"
-                                    className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-transparent rounded-lg border border-[#21dda9] appearance-none focus:outline-none focus:ring-0 focus:border-[#21dda9] peer"
+                                    className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-[#1A3A2F] rounded-lg appearance-none focus:outline-none focus:ring-0 border border-[#1F4033] focus:border-[#58C287] peer"
                                     placeholder=" "
                                 />
-                                <label className="absolute text-sm text-white duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#014421] px-2 peer-focus:px-2 peer-focus:text-[#21dda9] peer-focus:dark:text-[#21dda9] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                                <label className="absolute text-sm text-[#B0D6C5] duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#1A3A2F] px-2 peer-focus:px-2 peer-focus:text-[#58C287] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
                                     E-mail
                                 </label>
                             </div>
@@ -133,10 +133,10 @@ export default function Login() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block px-4 pr-10 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-transparent rounded-lg border border-[#21dda9] appearance-none focus:outline-none focus:ring-0 focus:border-[#21dda9] peer"
+                                    className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-[#1A3A2F] rounded-lg appearance-none focus:outline-none focus:ring-0 border border-[#1F4033] focus:border-[#58C287] peer"
                                     placeholder=" "
                                 />
-                                <label className="absolute text-sm text-white duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#014421] px-2 peer-focus:px-2 peer-focus:text-[#21dda9] peer-focus:dark:text-[#21dda9] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                                <label className="absolute text-sm text-[#B0D6C5] duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#1A3A2F] px-2 peer-focus:px-2 peer-focus:text-[#58C287] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
                                     Senha
                                 </label>
                                 <button
@@ -158,7 +158,7 @@ export default function Login() {
                         </form>
                     </div>
 
-                    <div className="flex-1 border rounded-lg py-4 mt-8 text-center bg-[#014421]">
+                    <div className="flex-1 rounded-lg py-4 mt-8 text-center bg-[#122C22]">
                         <p className="text-white">
                             Não tens uma conta?{' '}
                             <Link href="/account/register" className="font-medium text-[#228B22] underline">

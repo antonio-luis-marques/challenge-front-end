@@ -1,175 +1,124 @@
 import { Bell, History, LogOut, Settings, User } from 'lucide-react'
 import Link from 'next/link'
 import React, { MouseEvent, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 import { UserData, UserStorage } from '../../../lib/UserStorage'
-
 
 export default function ProfileCard() {
     const [openNotifications, setOpenNotifications] = useState(false)
     const bellRef = useRef<HTMLDivElement>(null)
-    const nameRef = useRef<HTMLDivElement>(null);
+    const nameRef = useRef<HTMLDivElement>(null)
     const notificationModalRef = useRef<HTMLDivElement>(null)
     const [profileClick, setProfileClick] = useState(false)
     const [scrollDir, setScrollDir] = useState<string>('')
     const [lastScrollY, setLastScrollY] = useState(0)
     const profileOption = useRef<HTMLDivElement>(null)
-    const [user, setUser] = useState<UserData | null>(null);
-
+    const [user, setUser] = useState<UserData | null>(null)
 
     const router = useRouter()
 
     useEffect(() => {
-        const handleScroll = () => {
-            setOpenNotifications(false)
-        };
-
-        const handleAlert = () => console.log('hello')
-        if (bellRef.current) {
-            bellRef.current.addEventListener('click', handleAlert, false)
-        }
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-
+        const sessionUser = UserStorage.getSession()
+        if (sessionUser) setUser(sessionUser)
     }, [])
 
-    useEffect(() => {
-        const sessionUser = UserStorage.getSession();
-        if (sessionUser) setUser(sessionUser);
-    }, []);
-
-
-    // const handleMouseEnter = () => {
-    //     if (!profileClick) {
-    //         if (nameRef.current) {
-    //             nameRef.current.style.display = 'block';
-    //         }
-    //     }
-    // };
-
     const logout = () => {
-        UserStorage.logout();
-        setUser(null);
-        router.push('/');
-    };
-
-
-    // const handleMouseLeave = () => {
-
-    //     if (nameRef.current) {
-    //         nameRef.current.style.display = 'none';
-    //     }
-    // };
+        UserStorage.logout()
+        setUser(null)
+        router.push('/')
+    }
 
     const handleClickProfile = () => {
         setProfileClick(!profileClick)
         if (nameRef.current) {
-            nameRef.current.style.display = 'none';
+            nameRef.current.style.display = 'none'
         }
     }
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
         if (notificationModalRef.current && !notificationModalRef.current.contains(event.target as Node)) {
-            setOpenNotifications(false);
+            setOpenNotifications(false)
         }
         if (profileOption.current && !profileOption.current.contains(event.target as Node)) {
-            setProfileClick(false);
+            setProfileClick(false)
         }
-    };
-
+    }
 
     useEffect(() => {
-        const handleClickOutsideWrapper = (event: Event) => handleClickOutside(event as MouseEvent | TouchEvent);
-
-        document.addEventListener('mousedown', handleClickOutsideWrapper);
-        document.addEventListener('touchstart', handleClickOutsideWrapper);
-
+        const handleClickOutsideWrapper = (event: Event) => handleClickOutside(event as MouseEvent | TouchEvent)
+        document.addEventListener('mousedown', handleClickOutsideWrapper)
+        document.addEventListener('touchstart', handleClickOutsideWrapper)
         return () => {
-            document.removeEventListener('mousedown', handleClickOutsideWrapper);
-            document.removeEventListener('touchstart', handleClickOutsideWrapper);
-        };
-    }, []);
-
-
+            document.removeEventListener('mousedown', handleClickOutsideWrapper)
+            document.removeEventListener('touchstart', handleClickOutsideWrapper)
+        }
+    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY
-
-            if (currentScrollY > lastScrollY) {
-                setScrollDir('down')
-            } else if (currentScrollY < lastScrollY) {
-                setScrollDir('up')
-            }
-
+            if (currentScrollY > lastScrollY) setScrollDir('down')
+            else if (currentScrollY < lastScrollY) setScrollDir('up')
             setLastScrollY(currentScrollY)
+            setOpenNotifications(false)
         }
 
-        window.addEventListener('scroll', () => setOpenNotifications(false));
         window.addEventListener('scroll', handleScroll)
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-            window.removeEventListener('scroll', () => setOpenNotifications(false))
-        }
+        return () => window.removeEventListener('scroll', handleScroll)
     }, [lastScrollY])
 
     return (
-        <div className={'items-center md:relative flex text-[#161616]'}>
-            <div ref={profileOption}
-                className='p-2 relative  md:flex hidden justify-center items-center rounded-full bg-zinc-50'
+        <div className='items-center md:relative flex text-[#161616]'>
+            {/* Desktop Profile */}
+            <div
+                ref={profileOption}
+                className='p-2 relative md:flex hidden justify-center items-center rounded-full bg-zinc-50'
                 onClick={handleClickProfile}
             >
                 <User />
-                <div className={' select-none divide-y divide-[#014421] text-[#014421]  min-w-72 shadow-sm border bg-white text-[15px] absolute right-0 top-10  rounded-lg ' + (!profileClick && 'hidden')}>
-                    <div className='p-2 font-normal'>
-                        <Link href={``} 
-                            className="flex items-center space-x-3 text-[#014421] hover:bg-[#e6f5ea] transition-colors p-1 rounded-md w-full"                            >
-                            <div className='p-2 rounded-full bg-zinc-50'>
-                                <User size={16} className="text-[#014421]"/>
-                            </div>
-                            <span className='whitespace-nowrap'>{user?.name}</span>
-                        </Link>
-                    </div>
-                    <div className='p-2 font-normal'>
-                        <button onClick={logout}
-                            className="flex items-center space-x-3 text-[#014421] hover:bg-[#e6f5ea] transition-colors p-2 rounded-md w-full"
-                        >
-                            <LogOut size={16} className="text-[#014421]" /><span>Sair</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div className="w-full divide-y divide-[#014421] md:hidden text-sm text-[#014421] select-none rounded-lg shadow-md overflow-hidden bg-white">
-                {/* Link para perfil */}
-                <div className="p-3">
-                    <Link
-                        href={``}
-                        className="flex items-center space-x-3 rounded-md hover:bg-[#e6f5ea] transition-colors p-2"
-                    >
-                        <div className="bg-[#e6f5ea] p-2 rounded-full">
-                            <User size={18} className="text-[#014421]" />
-                        </div>
-                        <span className="font-semibold truncate">{user?.name || 'Perfil'}</span>
+                <div className={`select-none text-[#014421] text-sm min-w-72 shadow-sm border bg-white absolute right-0 top-10 rounded-lg ${!profileClick && 'hidden'}`}>
+                    {/* Perfil */}
+                    <Link href={`/`} className='flex items-center gap-3 p-3 hover:bg-[#e6f5ea] transition-colors'>
+                        <div className='bg-[#e6f5ea] p-2 rounded-full'><User size={16} /></div>
+                        <span className='truncate font-semibold'>{user?.name || 'Perfil'}</span>
                     </Link>
-                </div>
-
-                {/* Botão de sair */}
-                <div className="p-3">
-                    <button
-                        onClick={logout}
-                        className="flex items-center space-x-3 text-[#014421] hover:bg-[#e6f5ea] transition-colors p-2 rounded-md w-full"
-                    >
-                        <LogOut size={18} className="text-[#014421]" />
-                        <span className="font-semibold">Sair</span>
+                    {/* Dashboard */}
+                    <Link href={`http://localhost:3001/`} className='flex items-center gap-3 p-3 hover:bg-[#e6f5ea] transition-colors'>
+                        <div className='bg-[#e6f5ea] p-2 rounded-full'><Settings size={16} /></div>
+                        <span className='font-semibold'>Dashboard</span>
+                    </Link>
+                    {/* Sair */}
+                    <button onClick={logout} className='w-full flex items-center gap-3 p-3 hover:bg-[#e6f5ea] transition-colors'>
+                        <div className='bg-[#e6f5ea] p-2 rounded-full'><LogOut size={16} /></div>
+                        <span className='font-semibold'>Sair</span>
                     </button>
                 </div>
             </div>
 
+            {/* Mobile Card */}
+            <div className="w-full divide-y divide-[#014421] md:hidden text-sm text-[#014421] select-none rounded-lg shadow-md overflow-hidden bg-white">
+                {/* Perfil */}
+                <div className="p-3">
+                    <Link href={`/`} className="flex items-center gap-3 hover:bg-[#e6f5ea] transition-colors p-2">
+                        <div className="bg-[#e6f5ea] p-2 rounded-full"><User size={18} /></div>
+                        <span className="font-semibold truncate">{user?.name || 'Perfil'}</span>
+                    </Link>
+                </div>
+                {/* Dashboard */}
+                <div className="p-3">
+                    <Link href={`http://localhost:3001/`} className="flex items-center gap-3 hover:bg-[#e6f5ea] transition-colors p-2">
+                        <div className="bg-[#e6f5ea] p-2 rounded-full"><Settings size={18} /></div>
+                        <span className="font-semibold">Dashboard</span>
+                    </Link>
+                </div>
+                {/* Sair */}
+                <div className="p-3">
+                    <button onClick={logout} className="flex items-center gap-3 hover:bg-[#e6f5ea] transition-colors p-2 w-full">
+                        <div className="bg-[#e6f5ea] p-2 rounded-full"><LogOut size={18} /></div>
+                        <span className="font-semibold">Sair</span>
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }

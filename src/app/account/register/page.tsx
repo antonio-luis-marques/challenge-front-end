@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { ThemeProvider, Typography } from '@mui/material';
+import { Avatar, Box, Stack, ThemeProvider, Typography } from '@mui/material';
 import { z } from 'zod';
 import Image from 'next/image';
 import theme from '../../../../theme';
@@ -36,12 +36,13 @@ export default function Register() {
     }
 
     setError(null);
-    const success = UserStorage.register({ name, email, password });
-    if (success) router.push('/')
+    const user = UserStorage.register({ name, email, password });
+    UserStorage.setSession({ name, email, password });
+    if (user) router.push('/quiz')
   };
 
   return (
-    <div className='h-screen w-full flex bg-[#34c75945]'>
+    <div className='h-screen w-full flex bg-[#0A1E14]'>
       <div className='w-1/2 h-full overflow-hidden bg-[#014421] relative md:flex hidden justify-center items-center'>
         <div className='z-20 px-20 flex flex-col items-center justify-center text-white'>
           <ThemeProvider theme={theme}>
@@ -71,34 +72,29 @@ export default function Register() {
 
       <div className='space-y-2 px-4 flex-1 flex flex-col justify-center items-center h-full'>
         <div className="md:w-96 w-full">
-          <div className="flex flex-col p-6 rounded-lg overflow-hidden w-full space-y-6 bg-[#014421]">
-            <div>
-              <div className='flex items-center w-full space-x-2 mb-4 justify-center text-center'>
-                <img
-                  src='/logo.png'
-                  alt='Logo'
-                  className='h-8'
-                />
-                <ThemeProvider theme={theme}>
-                  <Typography
-                    variant="h6"
-                    fontWeight="bold"
-                    sx={{ color: 'white', margin: 0, padding: 0 }}
-                  >
-                    <Link href='/' className="text-white">GJUNGLE</Link>
-                  </Typography>
-                </ThemeProvider>
-              </div>
+          <div className="flex flex-col p-6 rounded-lg overflow-hidden w-full bg-[#122C22]">
+            <div className='flex'>
               <ThemeProvider theme={theme}>
-                <Typography
-                  sx={{
-                    color: 'white',
-                    fontSize: '14px', // Tamanho pequeno para o texto
-                    textAlign: 'center', // Centraliza o texto
-                  }}
-                >
-                  Junte-se a nós
-                </Typography>
+
+                <Link href="/" passHref>
+                  {/* <a style={{ textDecoration: 'none' }}> */}
+                  <Stack direction="row" spacing={2} alignItems="center" mb={4} sx={{ cursor: 'pointer' }}>
+                    <Avatar
+                      alt="Logo Jungle Mídia"
+                      src="/logo.png"
+                      sx={{ width: 56, height: 56 }}
+                    />
+                    <Box>
+                      <Typography variant="h5" fontWeight="bold" color="white">
+                        Jungle Mídia
+                      </Typography>
+                      <Typography variant="subtitle2" color="#90A99F">
+                        Junte-se a Jungle Mídia
+                      </Typography>
+                    </Box>
+                  </Stack>
+                  {/* </a> */}
+                </Link>
               </ThemeProvider>
             </div>
 
@@ -110,10 +106,10 @@ export default function Register() {
                   id="name"
                   onChange={(e) => setName(e.target.value)}
                   type="text"
-                  className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-transparent rounded-lg border border-[#21dda9] appearance-none focus:outline-none focus:ring-0 focus:border-[#21dda9] peer"
+                  className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-[#1A3A2F] rounded-lg appearance-none focus:outline-none focus:ring-0 border border-[#1F4033] focus:border-[#58C287] peer"
                   placeholder=" "
                 />
-                <label htmlFor="name" className="absolute text-sm text-white duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#014421] px-2 peer-focus:px-2 peer-focus:text-[#21dda9] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
+                <label htmlFor="name" className="absolute text-sm text-[#B0D6C5] duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#1A3A2F] px-2 peer-focus:px-2 peer-focus:text-[#58C287] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
                   Nome
                 </label>
               </div>
@@ -123,10 +119,10 @@ export default function Register() {
                   onChange={(e) => setEmail(e.target.value)}
                   type="text"
                   id="email"
-                  className="block px-4 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-transparent rounded-lg border border-[#21dda9] appearance-none focus:outline-none focus:ring-0 focus:border-[#21dda9] peer"
+                  className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-[#1A3A2F] rounded-lg appearance-none focus:outline-none focus:ring-0 border border-[#1F4033] focus:border-[#58C287] peer"
                   placeholder=" "
                 />
-                <label htmlFor="email" className="absolute text-sm text-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#014421] px-2 peer-focus:px-2 peer-focus:text-[#21dda9] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
+                <label htmlFor="email" className="absolute text-sm text-[#B0D6C5] duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#1A3A2F] px-2 peer-focus:px-2 peer-focus:text-[#58C287] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
                   E-mail
                 </label>
               </div>
@@ -136,10 +132,10 @@ export default function Register() {
                   onChange={(e) => setPassword(e.target.value)}
                   type={showPassword ? 'text' : 'password'}
                   id="password"
-                  className="block px-4 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-transparent rounded-lg border border-[#21dda9] appearance-none focus:outline-none focus:ring-0 focus:border-[#21dda9] peer"
+                  className="block px-4 z-40 pb-2.5 h-12 pt-4 w-full text-sm text-white bg-[#1A3A2F] rounded-lg appearance-none focus:outline-none focus:ring-0 border border-[#1F4033] focus:border-[#58C287] peer"
                   placeholder=" "
                 />
-                <label htmlFor="password" className="absolute text-sm text-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-[#014421] px-2 peer-focus:px-2 peer-focus:text-[#21dda9] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
+                <label htmlFor="password" className="absolute text-sm text-[#B0D6C5] duration-300 z-10 transform -translate-y-4 scale-75 top-2 origin-[0] bg-[#1A3A2F] px-2 peer-focus:px-2 peer-focus:text-[#58C287] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">
                   Senha
                 </label>
                 <button
@@ -151,13 +147,15 @@ export default function Register() {
                 </button>
               </div>
 
-              <button type="submit" className="bg-[#228B22] active:scale-95 focus:outline-none w-full h-12 font-semibold text-white rounded-md">
+              <button type="submit"
+                className="bg-[#228B22] hover:bg-[#2EA043] active:bg-[#1A702E] transition-colors duration-200 active:scale-95 focus:outline-none w-full h-12 font-semibold text-white rounded-md"
+              >
                 Criar
               </button>
             </form>
           </div>
 
-          <div className="flex-1 border rounded-lg py-4 mt-8 text-center bg-[#014421]">
+          <div className="flex-1 rounded-lg py-4 mt-8 text-center bg-[#122C22]">
             <p className="text-white">Já tens uma conta? <Link href="/account/login" className="font-medium text-[#228B22] underline">Entrar</Link></p>
           </div>
         </div>

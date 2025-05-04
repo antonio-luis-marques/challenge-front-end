@@ -13,11 +13,11 @@ export default function Footer() {
             <ul>
               <li className="flex items-center mb-2">
                 <Mail className="mr-2" />
-                <a href="mailto:contato@wazzacursos.com">contacto@gjungle.com</a>
+                <a href="mailto:contacto@gjungle.com">contacto@gjungle.com</a>
               </li>
               <li className="flex items-center mb-2">
                 <Phone className="mr-2" />
-                <a href="tel:+551199999999">8428</a>
+                <a href="tel:+258840000000">258840000000</a>
               </li>
               <li className="flex items-center mb-2">
                 <MapPin className="mr-2" />
