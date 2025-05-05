@@ -86,10 +86,10 @@ export default function Register() {
                     />
                     <Box>
                       <Typography variant="h5" fontWeight="bold" color="white">
-                        Jungle Mídia
+                        Grupo Jungle
                       </Typography>
                       <Typography variant="subtitle2" color="#90A99F">
-                        Junte-se a Jungle Mídia
+                        Junte-se a Grupo Jungle
                       </Typography>
                     </Box>
                   </Stack>

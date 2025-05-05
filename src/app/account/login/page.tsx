@@ -98,10 +98,10 @@ export default function Login() {
                                         />
                                         <Box>
                                             <Typography variant="h5" fontWeight="bold" color="white">
-                                                Jungle Mídia
+                                                Grupo Jungle
                                             </Typography>
                                             <Typography variant="subtitle2" color="#90A99F">
-                                                Acesse sua conta na Jungle Mídia
+                                                Acesse sua conta na Grupo Jungle
                                             </Typography>
                                         </Box>
                                     </Stack>
