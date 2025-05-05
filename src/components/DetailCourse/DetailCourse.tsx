@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Chip, Stack, Button, TextField } from '@mui/material';
 import { Award, BookCheck, PlayCircle, Smile, Star, Lock, BookOpen, Clock, Cuboid } from 'lucide-react';
 import VideoPlay from '../VideoPlay/VideoPlay';
-import ModalQuiz from '../ModalQuiz/ModalQuiz';
 import ModalMpesaPay from '../ModalMpesaPay/ModalMpesaPay';
 
 import { courses } from '@/data/course';
@@ -15,20 +14,18 @@ interface DetailCourseProps {
 
 export default function DetailCourse({ id }: DetailCourseProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [quizPassed, setQuizPassed] = useState(false);
-  const [openQuiz, setOpenQuiz] = useState(false);
   const [openMpesa, setOpenMpesa] = useState(false);
-
+  const [completedVideos, setCompletedVideos] = useState<string[]>([]);
+  const [blockSubmit, setBlockSubmit] = useState(true)
   const [openModules, setOpenModules] = useState<number[]>([]);
-
+  const [paid, setPaid] = useState(false)
   const [user, setUser] = useState<UserData | null>(null)
-  
 
-  
-      useEffect(() => {
-          const sessionUser = UserStorage.getSession()
-          if (sessionUser) setUser(sessionUser)
-      }, [])
+
+  useEffect(() => {
+    const sessionUser = UserStorage.getSession()
+    if (sessionUser) setUser(sessionUser)
+  }, [])
 
   const toggleModule = (index: number) => {
     setOpenModules((prev) =>
@@ -64,6 +61,30 @@ export default function DetailCourse({ id }: DetailCourseProps) {
     ]
     : [];
 
+
+  const isVideoUnlocked = (index: number) => {
+    if (!paid) return index === 0;
+
+    if (index === 1) return true;
+
+    const previousVideo = allVideos[index - 1];
+
+    if (!previousVideo?.id) return false; // ou true, dependendo da lógica desejada
+
+    return completedVideos.includes(previousVideo.id);
+  };
+
+
+  const handleVideoClick = (index: number) => {
+    if (isVideoUnlocked(index)) {
+      setSelectedIndex(index);
+    }
+  };
+
+  // Excluir o vídeo de introdução do total de aulas
+  const courseVideos = allVideos.slice(1);
+
+
   const totalDurationInSeconds = allVideos.reduce((sum, video) => sum + (video.durationInSeconds || 0), 0);
 
   // Converter segundos para formato legível (ex: 1h 25min)
@@ -76,12 +97,6 @@ export default function DetailCourse({ id }: DetailCourseProps) {
   const formattedTotalDuration = formatDuration(totalDurationInSeconds);
 
 
-  useEffect(() => {
-    const handleScroll = () => { };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   if (!course) {
     return (
       <div className="text-white text-center p-8">
@@ -89,11 +104,6 @@ export default function DetailCourse({ id }: DetailCourseProps) {
       </div>
     );
   }
-
-  const handleQuizSuccess = () => {
-    setQuizPassed(true);
-    setOpenQuiz(false);
-  };
 
   const handleOpenMpesa = () => {
     const sessionUser = UserStorage.getSession();
@@ -105,14 +115,28 @@ export default function DetailCourse({ id }: DetailCourseProps) {
 
   const handleConfirmPayment = (phoneNumber: string) => {
     console.log('Número para pagamento:', phoneNumber);
+    setPaid(true)
     handleCloseMpesa();
   };
 
-  const handleVideoClick = (index: number) => {
-    if (index === 0 || quizPassed) {
-      setSelectedIndex(index);
+
+  const markVideoAsCompleted = (videoId: string) => {
+    if (!completedVideos.includes(videoId)) {
+      const updatedCompleted = [...completedVideos, videoId];
+      setCompletedVideos(updatedCompleted);
+
+      const allCourseVideoIds = courseVideos.map(video => video.id); // exclui introdução
+      const isLastVideo = videoId === courseVideos[courseVideos.length - 1].id;
+
+      const allCompleted = allCourseVideoIds.every(id => updatedCompleted.includes(String(id)));
+
+      if (isLastVideo && allCompleted) {
+        console.log("✅ Última aula concluída. Curso completo!");
+        setBlockSubmit(false)
+      }
     }
   };
+
 
   return (
     <div className="bg-[#014421] py-8 px-4 lg:px-24">
@@ -134,6 +158,7 @@ export default function DetailCourse({ id }: DetailCourseProps) {
                 url={allVideos[selectedIndex]?.videoUrl!}
                 blurDataURL=""
                 poster=""
+                markVideoAsCompleted={() => markVideoAsCompleted(allVideos[selectedIndex]?.videoUrl!)}
               />
             </div>
             <div className="p-4">
@@ -211,7 +236,7 @@ export default function DetailCourse({ id }: DetailCourseProps) {
               <div className="flex items-center gap-2 mb-2 px-2">
                 <BookOpen className="text-green-600 w-5 h-5" />
                 <p className="text-green-800 font-semibold text-sm">
-                  {allVideos.length} aula{allVideos.length > 1 ? 's' : ''}
+                  {courseVideos.length} aula{courseVideos.length > 1 ? 's' : ''}
                 </p>
               </div>
               <div className="flex items-center gap-2 mb-2 px-2">
@@ -248,28 +273,72 @@ export default function DetailCourse({ id }: DetailCourseProps) {
                   </div>
 
                   {isOpen && (
-                    <ul className="divide-y divide-green-200">
-                      {videos.map((video, index) => {
-                        const videoIndex = allVideos.findIndex(v => v.id === video.id);
-                        return (
-                          <li
-                            key={video.id}
-                            className={`flex items-center gap-3 px-6 py-3 cursor-pointer transition-colors ${selectedIndex === videoIndex
-                              ? 'bg-green-100'
-                              : 'hover:bg-green-50'
-                              }`}
-                            onClick={() => handleVideoClick(videoIndex)}
-                          >
-                            <PlayCircle className="text-green-600 w-5 h-5" />
-                            <span className="text-green-800 text-sm">{video.title}</span>
-                            {quizPassed || videoIndex === 0 ? null : (
-                              <Lock className="text-green-600 w-5 h-5 ml-auto" />
-                            )}
-                          </li>
-                        );
-                      })}
-                    </ul>
+                    <div>
+                      <ul className="divide-y divide-green-200">
+                        {videos.map((video, index) => {
+                          const videoIndex = allVideos.findIndex(v => v.id === video.id);
+                          return (
+                            <li
+                              key={video.id}
+                              className={`flex items-center gap-3 px-6 py-3 cursor-pointer transition-colors ${selectedIndex === videoIndex
+                                ? 'bg-green-100'
+                                : 'hover:bg-green-50'
+                                }`}
+                              onClick={() => handleVideoClick(videoIndex)}
+                            >
+                              <PlayCircle className="text-green-600 w-5 h-5" />
+                              <span className="text-green-800 text-sm">{video.title}</span>
+                              {!isVideoUnlocked(videoIndex) && (
+                                <Lock className="text-green-600 w-5 h-5 ml-auto" />
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+
+                      {/* Divider visual entre as aulas e o campo de submissão */}
+                      <div className="border-t border-green-300 mt-2 mb-3" />
+
+                      {/* Campo para submeter link do GitHub */}
+                      <div className="px-4 pb-4">
+                        <label className="block text-sm text-green-800 mb-2">Link do repositório GitHub</label>
+                        <input
+                          type="url"
+                          placeholder="https://github.com/seuusuario/seurepositorio"
+                          className="w-full border rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100 disabled:text-gray-500"
+                          disabled={blockSubmit}
+                        />
+                        {blockSubmit && (
+                          <p className="text-xs text-red-600 mt-1">
+                            ⚠️ Complete todas as aulas anteriores para liberar o envio do trabalho.
+                          </p>
+                        )}
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          sx={{
+                            backgroundColor: !blockSubmit ? '#228B22' : '#9ca3af', // verde ou cinza
+                            textTransform: 'none',
+                            mt: 2,
+                            cursor: !blockSubmit ? 'pointer' : 'not-allowed',
+                            '&:hover': {
+                              backgroundColor: !blockSubmit ? '#196619' : '#9ca3af',
+                            },
+                          }}
+                          disabled={blockSubmit}
+                          onClick={() => {
+                            if (blockSubmit) {
+                              alert(`Link enviado com sucesso!`);
+                            }
+                          }}
+                        >
+                          Submeter Trabalho
+                        </Button>
+                      </div>
+
+                    </div>
                   )}
+
                 </div>
               );
             })}
@@ -279,24 +348,29 @@ export default function DetailCourse({ id }: DetailCourseProps) {
           <Paper sx={{ p: 2, borderRadius: 2, overflow: 'hidden' }}>
             <Box display="flex" justifyContent="space-between" alignItems="flex-end">
               <Typography variant="subtitle1" fontWeight="bold">
-                {course.price?.toFixed(2)} MZN
+                {paid
+                  ? 'Já adquirido'
+                  : `${course.price?.toFixed(2)} MZN`}
               </Typography>
-              <Button
-                variant="outlined"
-                onClick={handleOpenMpesa}
-                sx={{
-                  borderColor: '#228B22',
-                  color: '#228B22',
-                  '&:hover': {
-                    backgroundColor: '#228B22',
-                    color: '#fff',
-                  },
-                  borderRadius: 2,
-                  textTransform: 'none',
-                }}
-              >
-                {user ? 'Matricular-se' : 'Avaliar-se'}
-              </Button>
+
+              {!paid && (
+                <Button
+                  variant="outlined"
+                  onClick={handleOpenMpesa}
+                  sx={{
+                    borderColor: '#228B22',
+                    color: '#228B22',
+                    '&:hover': {
+                      backgroundColor: '#228B22',
+                      color: '#fff',
+                    },
+                    borderRadius: 2,
+                    textTransform: 'none',
+                  }}
+                >
+                  {user ? 'Matricular-se' : 'Avaliar-se'}
+                </Button>
+              )}
             </Box>
 
             <Box mt={2}>
@@ -308,13 +382,13 @@ export default function DetailCourse({ id }: DetailCourseProps) {
                 <Stack direction="row" spacing={1} alignItems="center">
                   <BookCheck size={16} />
                   <Typography variant="caption">
-                  {course.modules.length} módulo{course.modules.length > 1 ? 's' : ''}
+                    {course.modules.length} módulo{course.modules.length > 1 ? 's' : ''}
                   </Typography>
                 </Stack>
                 <Stack direction="row" spacing={1} alignItems="center">
                   <BookCheck size={16} />
                   <Typography variant="caption">
-                    {allVideos.length} aula{allVideos.length > 1 ? 's' : ''}
+                    {courseVideos.length} aula{courseVideos.length > 1 ? 's' : ''}
                   </Typography>
                 </Stack>
                 <Stack direction="row" spacing={1} alignItems="center">
@@ -331,16 +405,13 @@ export default function DetailCourse({ id }: DetailCourseProps) {
         </div>
       </Box>
 
-      {/* Modais */}
-      <ModalQuiz
-        open={openQuiz}
-        onSuccess={handleQuizSuccess}
-        onClose={() => setOpenQuiz(false)}
-      />
+
       <ModalMpesaPay
         open={openMpesa}
         onClose={handleCloseMpesa}
         onConfirm={handleConfirmPayment}
+        courseName={course.title}
+
       />
     </div>
   );

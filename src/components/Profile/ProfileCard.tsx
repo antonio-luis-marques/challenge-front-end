@@ -67,6 +67,9 @@ export default function ProfileCard() {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [lastScrollY])
 
+    // const apiUrl = process.env.NEXT_PUBLIC_URL
+  const dashUrl = process.env.NEXT_PUBLIC_URL_DASH
+
     return (
         <div className='items-center md:relative flex text-[#161616]'>
             {/* Desktop Profile */}
@@ -83,7 +86,7 @@ export default function ProfileCard() {
                         <span className='truncate font-semibold'>{user?.name || 'Perfil'}</span>
                     </Link>
                     {/* Dashboard */}
-                    <Link href={`http://localhost:3001/`} className='flex items-center gap-3 p-3 hover:bg-[#e6f5ea] transition-colors'>
+                    <Link href={`${dashUrl}`} className='flex items-center gap-3 p-3 hover:bg-[#e6f5ea] transition-colors'>
                         <div className='bg-[#e6f5ea] p-2 rounded-full'><Settings size={16} /></div>
                         <span className='font-semibold'>Dashboard</span>
                     </Link>
@@ -106,7 +109,7 @@ export default function ProfileCard() {
                 </div>
                 {/* Dashboard */}
                 <div className="p-3">
-                    <Link href={`http://localhost:3001/`} className="flex items-center gap-3 hover:bg-[#e6f5ea] transition-colors p-2">
+                    <Link href={`${dashUrl}`} className="flex items-center gap-3 hover:bg-[#e6f5ea] transition-colors p-2">
                         <div className="bg-[#e6f5ea] p-2 rounded-full"><Settings size={18} /></div>
                         <span className="font-semibold">Dashboard</span>
                     </Link>

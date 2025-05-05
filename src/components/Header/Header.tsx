@@ -39,6 +39,9 @@ export default function Header() {
     if (sessionUser) setUser(sessionUser);
   }, []);
 
+  const apiUrl = process.env.NEXT_PUBLIC_URL
+  const dashUrl = process.env.NEXT_PUBLIC_URL_DASH
+
   return (
     <div className={`flex h-16 border-b bg-white sticky z-40 w-full xl:px-24 px-4 transition-all duration-500 ${scrollDir === 'up' && lastScrollY != 0 ? 'top-0 shadow-sm' : 'md:-top-16 shadow-sm top-[-66px]'}`}>
       <div className='w-full flex justify-between items-center h-full'>
@@ -114,7 +117,7 @@ export default function Header() {
           </form>
           <div className='flex items-center '>
             <Link
-              href=''
+              href='#'
               target='_blank'
               rel='noopener noreferrer'
               className='ml-4 h-8 px-4 text-[#228B22] rounded-md transition hidden md:inline-flex items-center hover:text-white hover:bg-[#228B22]'
@@ -122,7 +125,7 @@ export default function Header() {
               Instrutor
             </Link>
             <Link
-              href='https://marketplace.seudominio.com'
+              href={`${apiUrl}`}
               target='_blank'
               rel='noopener noreferrer'
               className='h-8 px-4 text-[#228B22] rounded-md transition hidden md:inline-flex items-center hover:text-white hover:bg-[#228B22]'
@@ -175,7 +178,7 @@ export default function Header() {
             {/* Botão instrutor no mobile */}
             <div className='space-y-4 mt-4 flex-col flex'>
             <Link
-              href='https://instrutor.seudominio.com'
+              href='#'
               target='_blank'
               rel='noopener noreferrer'
               className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
@@ -183,7 +186,7 @@ export default function Header() {
               Instrutor
             </Link>
             <Link
-              href='https://marketplace.seudominio.com'
+              href={`${apiUrl}`}
               target='_blank'
               rel='noopener noreferrer'
               className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'

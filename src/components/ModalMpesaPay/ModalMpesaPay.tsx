@@ -5,14 +5,18 @@ interface ModalPagamentoMpesaProps {
   open: boolean;
   onClose: () => void;
   onConfirm: (phoneNumber: string) => void;
+  courseName: string; // ✅ Novo prop
 }
 
-const ModalPagamentoMpesa = ({ open, onClose, onConfirm }: ModalPagamentoMpesaProps) => {
+const ModalPagamentoMpesa = ({ open, onClose, onConfirm, courseName }: ModalPagamentoMpesaProps) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleConfirm = () => {
-    if (phoneNumber) {
+    const isValid = /^8[2-7]\d{7}$/.test(phoneNumber); // Validação simples para Moçambique
+    if (isValid) {
       onConfirm(phoneNumber);
+    } else {
+      alert('Por favor, insira um número válido (começando com 82 a 87 e com 9 dígitos).');
     }
   };
 
@@ -31,74 +35,55 @@ const ModalPagamentoMpesa = ({ open, onClose, onConfirm }: ModalPagamentoMpesaPr
           borderRadius: 2,
         }}
       >
-        <Typography variant="h6" mb={2}>
-          Pagamento via M-Pesa
+        <Typography variant="h6" mb={1} fontWeight={600}>
+          Pagar curso de {courseName} via M-Pesa
         </Typography>
 
         <Typography variant="body2" color="text.secondary" mb={3}>
-          Insira seu número M-Pesa para realizar o pagamento.
+          Para continuar, insira seu número de telefone M-Pesa para processar o pagamento.
         </Typography>
 
         <Stack spacing={2}>
-          {/* Agora também muda o label */}
           <TextField
-            label="Número de Telefone"
+            label="Número M-Pesa"
             variant="outlined"
             placeholder="Ex: 84XXXXXXX"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             fullWidth
+            inputProps={{ maxLength: 9 }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
-                  borderColor: '#228B22',  // Cor da borda normal
-                  borderWidth: 1,          // Espessura da borda
+                  borderColor: '#228B22',
                 },
                 '&:hover fieldset': {
-                  borderColor: '#228B22',  // Cor da borda no hover
+                  borderColor: '#228B22',
                 },
                 '&.Mui-focused fieldset': {
-                  borderColor: '#228B22',  // Cor da borda no foco
-                  borderWidth: 1,          // Mantém a mesma espessura no foco
-                },
-                '& input': {
-                  padding: '8px 12px',  // Ajuste para reduzir a altura do input
+                  borderColor: '#228B22',
                 },
               },
-              '& label': {
-                color: 'grey',  // Cor do label normal
-                lineHeight: 1,  // Controla a altura da linha para centralizar o label
-              },
-              '& label.Mui-focused': {
-                color: '#228B22',  // Cor do label no foco
-              },
-              '& input::placeholder': {
-                color: 'grey',  // Cor do placeholder normal
-                opacity: 1,
-              },
-              // Ajuste adicional para garantir que o label esteja centrado
               '& .MuiInputLabel-root': {
-                transform: 'translate(14px, 10px) scale(1)',  // Ajuste da posição vertical
+                color: 'grey',
               },
               '& .MuiInputLabel-root.Mui-focused': {
-                transform: 'translate(14px, -8px) scale(0.75)',  // Foco no label
+                color: '#228B22',
               },
             }}
           />
 
-          <Box display="flex" justifyContent="space-between" mt={2}>
+          <Box display="flex" justifyContent="space-between">
             <Button
               variant="outlined"
               onClick={onClose}
               sx={{
-                color: 'green',
-                borderColor: 'green',
-                backgroundColor: 'white',
+                color: '#228B22',
+                borderColor: '#228B22',
                 width: '48%',
                 '&:hover': {
-                  backgroundColor: 'green',
+                  backgroundColor: '#228B22',
                   color: 'white',
-                  borderColor: 'green',
                 },
               }}
             >
@@ -107,9 +92,14 @@ const ModalPagamentoMpesa = ({ open, onClose, onConfirm }: ModalPagamentoMpesaPr
 
             <Button
               variant="contained"
-              color="success"
+              sx={{
+                width: '48%',
+                backgroundColor: '#228B22',
+                '&:hover': {
+                  backgroundColor: '#1e7a1e',
+                },
+              }}
               onClick={handleConfirm}
-              sx={{ width: '48%' }}
             >
               Confirmar
             </Button>
