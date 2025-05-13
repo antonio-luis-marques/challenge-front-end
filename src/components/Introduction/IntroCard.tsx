@@ -120,7 +120,7 @@ export default function IntroCard() {
           {!user && (
             <Box sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}>
             <Button
-              href="/account/login"
+              href="/auth/login"
               sx={{
                 backgroundColor: 'white',
                 color: 'green',
