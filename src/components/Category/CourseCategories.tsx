@@ -46,6 +46,7 @@ const categories: CourseCategory[] = [
 export default function CourseCategories() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const { setCategoryCourse } = useContextCategoryCourse()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedIndex(newValue)
@@ -60,9 +61,9 @@ export default function CourseCategories() {
           value={selectedIndex}
           onChange={handleChange}
           variant="scrollable"
-          scrollButtons="auto"  // Manter as setas visíveis
-          allowScrollButtonsMobile={true}  // Permitir que as setas funcionem em dispositivos móveis
-          TabIndicatorProps={{ style: { display: 'none' } }} // remove underline
+          scrollButtons={isSmallScreen ? false : 'auto'}
+          allowScrollButtonsMobile={true}
+          TabIndicatorProps={{ style: { display: 'none' } }}
           sx={{
             position: 'relative',  // Necessário para que as setas possam ser posicionadas de forma absoluta
             '& .MuiTab-root': {

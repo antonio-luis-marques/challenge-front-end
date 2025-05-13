@@ -67,7 +67,6 @@ export default function ProfileCard() {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [lastScrollY])
 
-    // const apiUrl = process.env.NEXT_PUBLIC_URL
   const dashUrl = process.env.NEXT_PUBLIC_URL_DASH
 
     return (

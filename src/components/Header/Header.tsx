@@ -3,11 +3,12 @@
 import {
   Menu as MenuIcon,
   Search,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from '../Profile/ProfileCard'
-import { Typography, Drawer, IconButton, Box, ThemeProvider, Paper, InputBase } from '@mui/material'
+import { Typography, Drawer, IconButton, Box, ThemeProvider, Paper, InputBase, Fade, ClickAwayListener } from '@mui/material'
 import theme from '../../../theme'
 import { UserData, UserStorage } from '../../../lib/UserStorage'
 
@@ -18,6 +19,8 @@ export default function Header() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [user, setUser] = useState<UserData | null>(null);
+  const [mobileSearchVisible, setMobileSearchVisible] = useState(false);
+
 
   const handleToggle = () => {
     setExpanded((prev) => !prev);
@@ -50,12 +53,12 @@ export default function Header() {
           <img
             src='/logo.png'
             alt='Logo'
-            className='h-12'
+            className='h-8'
           />
           <ThemeProvider theme={theme}>
-            <Typography variant="h6" fontWeight="bold" sx={{ margin: 0, padding: 0 }}>
+            <Typography fontWeight="bold" sx={{ margin: 0, padding: 0 }}>
               <Link href='/'>
-                GJUNGLE
+                G.J
               </Link>
             </Typography>
           </ThemeProvider>
@@ -144,57 +147,129 @@ export default function Header() {
         </div>
 
         {/* Mobile menu button */}
-        <div className='md:hidden'>
+        <div className='md:hidden ' >
+          <IconButton onClick={() => setMobileSearchVisible((prev) => !prev)}>
+            <Search />
+          </IconButton>
           <IconButton onClick={() => setSidebarOpen(true)}>
             <MenuIcon />
           </IconButton>
+
+          {mobileSearchVisible && (
+            <ClickAwayListener onClickAway={() => setMobileSearchVisible(false)}>
+              <Fade in={mobileSearchVisible}>
+                <Paper
+                  elevation={4}
+                  sx={{
+                    // width: '100%',
+                    position: 'absolute',
+                    top: '64px',
+                    left: 0,
+                    right: 0,
+                    // mx: 2,
+                    px: 2,
+                    py: 1,
+                    zIndex: 50,
+                    display: 'flex',
+                    alignItems: 'center',
+                    // borderRadius: '9999px',
+                    backgroundColor: 'white',
+                    border: '1px solid #ccc',
+                    boxShadow: 'none'
+                  }}
+                >
+                  <Search style={{ color: '#666' }} />
+                  <InputBase
+                    placeholder="Pesquisar cursos"
+                    fullWidth
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    sx={{ flex: 1 }}
+                  />
+                  <IconButton onClick={() => setMobileSearchVisible(false)}>
+                    <X />
+                  </IconButton>
+                </Paper>
+              </Fade>
+            </ClickAwayListener>
+          )}
         </div>
 
         {/* Sidebar para mobile */}
-        <Drawer anchor="right" open={sidebarOpen} onClose={() => setSidebarOpen(false)}>
-          <Box sx={{ width: 300, p: 2 }}>
-            {/* Search no sidebar */}
-            <div className='mb-4'>
-              <div className='flex items-center space-x-2 border rounded-full p-2'>
-                <Search className='text-slate-600' />
-                <input
-                  type="search"
-                  className='flex-1 text-sm border-0 focus:outline-none bg-transparent'
-                  placeholder='Pesquisar cursos'
-                />
-              </div>
-            </div>
-
-            {/* Autenticação ou perfil */}
-            {user ? (
-              <ProfileCard />
-            ) : (
-              <div className='flex flex-col space-y-4'>
-                <Link href='/account/login' className='text-[#228B22] text-center p-2 border border-[#228b22] rounded'>Entrar</Link>
-                <Link href='/account/register' className='bg-[#228B22] text-white p-2 rounded text-center'>Registar</Link>
-              </div>
-            )}
-
-            {/* Botão instrutor no mobile */}
-            <div className='space-y-4 mt-4 flex-col flex'>
-            <Link
-              href='#'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
+        <Drawer
+          anchor="right"
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          PaperProps={{
+            sx: {
+              width: '100%',
+              maxWidth: '100vw',
+              backgroundColor: '#fff',
+              height: '100vh',
+            },
+          }}
+        >
+          <Box sx={{ position: 'relative', p: 2, height: '100%' }}>
+            {/* Botão de fechar no topo direito */}
+            <IconButton
+              onClick={() => setSidebarOpen(false)}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                border: '1px solid #228B22',
+                color: '#228B22',
+                width: 32,
+                height: 32,
+              }}
             >
-              Instrutor
-            </Link>
-            <Link
-              href={`${apiUrl}`}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
-            >
-              Marketplace
-            </Link>
-            </div>
+              <X size={18} />
+            </IconButton>
 
+            {/* Espaço para conteúdo abaixo do botão */}
+            <Box mt={4}>
+              {/* Search no sidebar */}
+              <div className='mb-4'>
+                <div className='flex items-center space-x-2 border rounded-full p-2'>
+                  <Search className='text-slate-600' />
+                  <input
+                    type="search"
+                    className='flex-1 text-sm border-0 focus:outline-none bg-transparent'
+                    placeholder='Pesquisar cursos'
+                  />
+                </div>
+              </div>
+
+              {/* Autenticação ou perfil */}
+              {user ? (
+                <ProfileCard />
+              ) : (
+                <div className='flex flex-col space-y-4'>
+                  <Link href='/account/login' className='text-[#228B22] text-center p-2 border border-[#228b22] rounded'>Entrar</Link>
+                  <Link href='/account/register' className='bg-[#228B22] text-white p-2 rounded text-center'>Registar</Link>
+                </div>
+              )}
+
+              {/* Botões extras */}
+              <div className='space-y-4 mt-4 flex-col flex'>
+                <Link
+                  href='#'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
+                >
+                  Instrutor
+                </Link>
+                <Link
+                  href={`${apiUrl}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-[#228B22] text-center p-2 border border-[#228b22] rounded hover:bg-[#228B22] hover:text-white transition'
+                >
+                  Marketplace
+                </Link>
+              </div>
+            </Box>
           </Box>
         </Drawer>
       </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Chip, Stack, Button, TextField } from '@mui/material';
 import { Award, BookCheck, PlayCircle, Smile, Star, Lock, BookOpen, Clock, Cuboid } from 'lucide-react';
 import VideoPlay from '../VideoPlay/VideoPlay';
-import ModalMpesaPay from '../ModalMpesaPay/ModalMpesaPay';
+import ModalMpesaPay from '../Modal/ModalMpesaPay';
 
 import { courses } from '@/data/course';
 import { UserData, UserStorage } from '../../../lib/UserStorage';

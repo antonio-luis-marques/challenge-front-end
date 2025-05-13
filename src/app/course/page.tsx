@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import DetailCourse from '@/components/DetailCourse/DetailCourse'
-import SeeToo from '@/components/SeeToo/SeeToo'
+import SeeToo from '@/components/SeeAlso/SeeToo'
 import { useSearchParams } from 'next/navigation'
 import { useModalContext } from '@/components/Provider/ModalProvider/ModalProvider'
 

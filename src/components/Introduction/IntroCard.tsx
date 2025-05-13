@@ -155,11 +155,11 @@ export default function IntroCard() {
             src={slides[currentSlide].imageUrl}
             alt={slides[currentSlide].title}
             fill
+            priority
             style={{
               objectFit: 'cover',
               borderRadius: '0.5rem',
             }}
-            unoptimized
           />
 
 
