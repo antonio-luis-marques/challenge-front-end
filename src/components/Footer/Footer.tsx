@@ -17,7 +17,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center mb-2">
                 <Phone className="mr-2" />
-                <a href="tel:+258840000000">258840000000</a>
+                <a href="tel:+258820630317">820630317</a>
               </li>
               <li className="flex items-center mb-2">
                 <MapPin className="mr-2" />
@@ -58,16 +58,16 @@ export default function Footer() {
             <h2 className="text-lg font-semibold mb-4">Outras Informações</h2>
             <ul>
               <li className="mb-2">
-                <a href="/about" className="hover:underline">Sobre Nós</a>
+                <a href="#" className="hover:underline">Sobre Nós</a>
               </li>
               <li className="mb-2">
-                <a href="/faq" className="hover:underline">Perguntas Frequentes</a>
+                <a href="#" className="hover:underline">Perguntas Frequentes</a>
               </li>
               <li className="mb-2">
-                <a href="/terms" className="hover:underline">Termos de Serviço</a>
+                <a href="#" className="hover:underline">Termos de Serviço</a>
               </li>
               <li>
-                <a href="/privacy" className="hover:underline">Política de Privacidade</a>
+                <a href="#" className="hover:underline">Política de Privacidade</a>
               </li>
             </ul>
           </div>
