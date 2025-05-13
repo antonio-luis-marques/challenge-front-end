@@ -140,8 +140,8 @@ export default function Header() {
             <ProfileCard />
           ) : (
             <div className='flex items-center space-x-6 ml-4'>
-              <Link href='/account/login' className='text-[#228B22]'>Entrar</Link>
-              <Link href='/account/register' className='h-8 px-4 bg-[#228B22] flex justify-center items-center rounded-md text-white'>Registar</Link>
+              <Link href='/auth/login' className='text-[#228B22]'>Entrar</Link>
+              <Link href='/auth/register' className='h-8 px-4 bg-[#228B22] flex justify-center items-center rounded-md text-white'>Registar</Link>
             </div>
           )}
         </div>
@@ -245,8 +245,8 @@ export default function Header() {
                 <ProfileCard />
               ) : (
                 <div className='flex flex-col space-y-4'>
-                  <Link href='/account/login' className='text-[#228B22] text-center p-2 border border-[#228b22] rounded'>Entrar</Link>
-                  <Link href='/account/register' className='bg-[#228B22] text-white p-2 rounded text-center'>Registar</Link>
+                  <Link href='/auth/login' className='text-[#228B22] text-center p-2 border border-[#228b22] rounded'>Entrar</Link>
+                  <Link href='/auth/register' className='bg-[#228B22] text-white p-2 rounded text-center'>Registar</Link>
                 </div>
               )}
 
