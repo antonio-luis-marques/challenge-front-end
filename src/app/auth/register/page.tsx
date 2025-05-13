@@ -54,20 +54,17 @@ export default function Register() {
             </Typography>
           </ThemeProvider>
         </div>
-        <div className='absolute z-10 opacity-75'>
+        {/* <div className='absolute z-10 opacity-75'> */}
           <Image
             src={'https://res.cloudinary.com/dt0vpc25d/image/upload/v1745917966/grupo%20jungle/login-register/cover1.jpg'}
             alt={''}
-            width={600}
-            height={400}
+            fill
+            priority
             style={{
-              width: '100%',
-              height: '100%',
               objectFit: 'cover',
             }}
-            unoptimized
           />
-        </div>
+        {/* </div> */}
       </div>
 
       <div className='space-y-2 px-4 flex-1 flex flex-col justify-center items-center h-full'>
@@ -156,7 +153,7 @@ export default function Register() {
           </div>
 
           <div className="flex-1 rounded-lg py-4 mt-8 text-center bg-[#122C22]">
-            <p className="text-white">Já tens uma conta? <Link href="/account/login" className="font-medium text-[#228B22] underline">Entrar</Link></p>
+            <p className="text-white">Já tens uma conta? <Link href="/auth/login" className="font-medium text-[#228B22] underline">Entrar</Link></p>
           </div>
         </div>
 
