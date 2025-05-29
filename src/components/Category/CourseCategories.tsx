@@ -40,7 +40,7 @@ const categories: CourseCategory[] = [
     icon: (color) => <Server size={24} color={color} />,
     iconColor: '#228B22',
   },
- 
+
 ]
 
 export default function CourseCategories() {
@@ -67,14 +67,15 @@ export default function CourseCategories() {
           sx={{
             position: 'relative',  // Necessário para que as setas possam ser posicionadas de forma absoluta
             '& .MuiTab-root': {
-              minWidth: 200,
-              height: 60,
+              // minWidth: 100,
+              // height: 60,
               borderRadius: 2,
               textTransform: 'none',
               fontWeight: 600,
               fontSize: 16,
               mr: 1,
               px: 2,
+              py: 2,
               border: '1.5px solid rgba(0,0,0,0.08)',
               display: 'flex',
               justifyContent: 'space-between',
@@ -126,10 +127,16 @@ export default function CourseCategories() {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     width: '100%',
-                    columnGap: 2,
+                    height: '100%',
+                    columnGap: 4,
+                    
                   }}
                 >
-                  <Typography sx={{ fontWeight: 500 }}>
+                  <Typography sx={{ fontWeight: 500, fontSize: {
+                      xs: '0.75rem',  // mobile
+                      sm: '0.875rem', // tablets
+                      md: '1rem',     // desktops
+                    },}}>
                     {category.name === 'Top' ? 'Top Cursos' : category.name}
                   </Typography>
                   {category.icon('#666')}

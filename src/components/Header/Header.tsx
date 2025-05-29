@@ -20,6 +20,8 @@ export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [user, setUser] = useState<UserData | null>(null);
   const [mobileSearchVisible, setMobileSearchVisible] = useState(false);
+  const mobileSearchInputRef = React.useRef<HTMLInputElement | null>(null);
+
 
 
   const handleToggle = () => {
@@ -41,6 +43,12 @@ export default function Header() {
     const sessionUser = UserStorage.getSession();
     if (sessionUser) setUser(sessionUser);
   }, []);
+
+  useEffect(() => {
+    if (mobileSearchVisible && mobileSearchInputRef.current) {
+      mobileSearchInputRef.current.focus();
+    }
+  }, [mobileSearchVisible]);
 
   const apiUrl = process.env.NEXT_PUBLIC_URL
   const dashUrl = process.env.NEXT_PUBLIC_URL_DASH
@@ -145,10 +153,9 @@ export default function Header() {
             </div>
           )}
         </div>
-
         {/* Mobile menu button */}
         <div className='md:hidden ' >
-          <IconButton onClick={() => setMobileSearchVisible((prev) => !prev)}>
+          <IconButton onClick={() => setMobileSearchVisible((prev) => true)}>
             <Search />
           </IconButton>
           <IconButton onClick={() => setSidebarOpen(true)}>
@@ -182,9 +189,10 @@ export default function Header() {
                   <InputBase
                     placeholder="Pesquisar cursos"
                     fullWidth
+                    inputRef={mobileSearchInputRef}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    sx={{ flex: 1 }}
+                    sx={{ flex: 1, px: 2, }}
                   />
                   <IconButton onClick={() => setMobileSearchVisible(false)}>
                     <X />
