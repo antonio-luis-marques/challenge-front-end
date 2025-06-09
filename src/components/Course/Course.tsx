@@ -55,6 +55,7 @@ export default function Course() {
               sx={{
                 width: '100%',
                 position: 'relative',
+                aspectRatio: '16 / 9',
                 cursor: 'pointer',
                 backgroundColor: 'black',
                 display: 'flex',
@@ -66,12 +67,16 @@ export default function Course() {
               <Image
                 src={item.cover}
                 alt={item.title}
-                className='w-full h-48 object-cover transition-transform duration-300 ease-in-out transform hover:scale-105'
-                width={400}
-                height={192}
+                fill
+                style={{
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s ease-in-out',
+                }}
+                className='hover:scale-105'
                 unoptimized
               />
             </Box>
+
 
             <div className='space-y-4 p-2'>
               <Typography variant='h6'>{item.title}</Typography>

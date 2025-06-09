@@ -1,8 +1,10 @@
 'use client';
 
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import React, { useRef, useState, useEffect } from 'react';
+import { Box, Card, CardContent, IconButton, Typography, useMediaQuery } from '@mui/material';
 import Image from 'next/image';
-import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTheme } from '@mui/material/styles';
 
 const benefits = [
   {
@@ -20,33 +22,125 @@ const benefits = [
     description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
     image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
   },
+  {
+    title: 'Acesso privilegiado ao mercado',
+    description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
+    image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
+  },
+  {
+    title: 'Acesso privilegiado ao mercado',
+    description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
+    image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
+  },
+  {
+    title: 'Acesso privilegiado ao mercado',
+    description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
+    image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
+  },
+  {
+    title: 'Acesso privilegiado ao mercado',
+    description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
+    image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
+  },
+  {
+    title: 'Acesso privilegiado ao mercado',
+    description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
+    image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
+  },
+  {
+    title: 'Acesso privilegiado ao mercado',
+    description: 'Conecte-se com empresas que buscam profissionais de qualidade.',
+    image: 'https://res.cloudinary.com/dt0vpc25d/image/upload/v1746038625/grupo%20jungle/cover1.jpg',
+  },
 ];
 
 export default function BenefitCarousel() {
-  return (
-    <Box
-      sx={{
-        backgroundColor: '#0E2B1C',
-        py: 6,
-        px: 2,
-        color: 'white',
-      }}
-    >
-      {/* título alinhado à esquerda */}
-      <Typography variant="h6" fontWeight="bold" mb={4}>
-      O que você ganha
-      </Typography>
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-      {/* cards centralizados */}
+  const theme = useTheme();
+  const isLaptop = useMediaQuery(theme.breakpoints.up('md'));
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth);
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = el.clientWidth * 0.8;
+    el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    checkScroll();
+    el.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
+
+  return (
+    <Box sx={{ backgroundColor: '#0E2B1C', py: 6, px: 2, color: 'white', position: 'relative' }}>
+      <Typography variant="h6" fontWeight="bold" sx={{ mb: 3, textAlign: 'center' }}>
+        O que você ganha
+      </Typography>
+      {/* Setas de navegação (visíveis apenas em telas médias para cima) */}
+      {isLaptop && canScrollLeft && (
+        <IconButton
+          onClick={() => scroll('left')}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: 0,
+            transform: 'translateY(-50%)',
+            zIndex: 2,
+            color: 'white',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.6)' },
+          }}
+        >
+          <ChevronLeft />
+        </IconButton>
+      )}
+
+      {isLaptop && canScrollRight && (
+        <IconButton
+          onClick={() => scroll('right')}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            right: 0,
+            transform: 'translateY(-50%)',
+            zIndex: 2,
+            color: 'white',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.6)' },
+          }}
+        >
+          <ChevronRight />
+        </IconButton>
+      )}
+
       <Box
+        ref={scrollRef}
         sx={{
           overflowX: 'auto',
           display: 'flex',
           gap: 2,
-          justifyContent: 'center',
           scrollSnapType: 'x mandatory',
           px: 2,
-          '&::-webkit-scrollbar': { display: 'none' }, // oculta a barra de rolagem
+          '&::-webkit-scrollbar': { display: 'none' },
         }}
       >
         {benefits.map((benefit, index) => (
@@ -63,7 +157,7 @@ export default function BenefitCarousel() {
               backgroundColor: '#ffffff',
             }}
           >
-            <Box sx={{ position: 'relative', height: 160 }}>
+            <Box sx={{ position: 'relative', width: '100%', aspectRatio: '16 / 9' }}>
               <Image
                 src={benefit.image}
                 alt={benefit.title}
